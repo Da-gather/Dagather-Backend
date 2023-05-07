@@ -17,7 +17,7 @@ env:
   AWS_REGION: ap-northeast-2
   AWS_S3_BUCKET: dagather20-deploy-bucket
   AWS_CODE_DEPLOY_APPLICATION: dagather-codedeploy
-  AWS_CODE_DEPLOY_GROUP: dagather_instance
+  AWS_CODE_DEPLOY_GROUP: dagather-codedeploy-group
 
 jobs:
   build:
@@ -73,7 +73,8 @@ jobs:
         
     - name: Upload to AWS S3
       if: contains(github.ref, 'main')
-      run: aws deploy push \
+      run: |
+       aws deploy push \
           --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} \
           --ignore-hidden-files \
           --s3-location s3://$AWS_S3_BUCKET/build/$GITHUB_SHA.zip \
@@ -82,7 +83,8 @@ jobs:
     # S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
     - name: Deploy to AWS EC2 from S3
       if: contains(github.ref, 'main')
-      run: aws deploy create-deployment \
+      run: |
+       aws deploy create-deployment \
           --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} \
