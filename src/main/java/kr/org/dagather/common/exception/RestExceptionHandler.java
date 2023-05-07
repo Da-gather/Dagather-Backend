@@ -7,15 +7,15 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.MDC;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.BadCredentialsException;
+// import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import kr.co.preq.global.common.util.response.ApiResponse;
-import kr.co.preq.global.common.util.response.ErrorCode;
+import kr.org.dagather.common.response.ApiResponse;
+import kr.org.dagather.common.response.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -48,13 +48,13 @@ public class RestExceptionHandler {
 		return ApiResponse.error(HttpStatus.BAD_REQUEST, message);
 	}
 
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	@ExceptionHandler(BadCredentialsException.class)
-	protected ApiResponse<Object> handleBadCredentialsException(BadCredentialsException exception,
-		HttpServletRequest request) {
-		logInfo(request, HttpStatus.NOT_FOUND, exception.getMessage());
-		return ApiResponse.error(ErrorCode.USER_NOT_FOUND);
-	}
+	// @ResponseStatus(HttpStatus.NOT_FOUND)
+	// @ExceptionHandler(BadCredentialsException.class)
+	// protected ApiResponse<Object> handleBadCredentialsException(BadCredentialsException exception,
+	// 	HttpServletRequest request) {
+	// 	logInfo(request, HttpStatus.NOT_FOUND, exception.getMessage());
+	// 	return ApiResponse.error(ErrorCode.USER_NOT_FOUND);
+	// }
 
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	@ExceptionHandler(NotFoundException.class)

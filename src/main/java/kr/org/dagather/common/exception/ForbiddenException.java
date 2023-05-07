@@ -1,6 +1,6 @@
 package kr.org.dagather.common.exception;
 
-import kr.co.preq.global.common.util.response.ErrorCode;
+import kr.org.dagather.common.response.ErrorCode;
 import lombok.Getter;
 
 @Getter
