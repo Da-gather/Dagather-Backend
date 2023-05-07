@@ -82,8 +82,7 @@ jobs:
     # S3 버킷에 있는 파일을 대상으로 CodeDeploy 실행
     - name: Deploy to AWS EC2 from S3
       if: contains(github.ref, 'main')
-      run: |
-        aws deploy create-deployment \
+      run: aws deploy create-deployment \
           --application-name ${{ env.AWS_CODE_DEPLOY_APPLICATION }} \
           --deployment-config-name CodeDeployDefault.AllAtOnce \
           --deployment-group-name ${{ env.AWS_CODE_DEPLOY_GROUP }} \
