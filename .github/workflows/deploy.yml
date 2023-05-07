@@ -17,7 +17,7 @@ env:
   AWS_REGION: ap-northeast-2
   AWS_S3_BUCKET: dagather20-deploy-bucket
   AWS_CODE_DEPLOY_APPLICATION: dagather-codedeploy
-  AWS_CODE_DEPLOY_GROUP: dagather-codedeploy-group
+  AWS_CODE_DEPLOY_GROUP: dagather_instance
 
 jobs:
   build:
