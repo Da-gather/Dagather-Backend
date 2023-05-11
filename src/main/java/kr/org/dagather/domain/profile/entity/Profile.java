@@ -1,8 +1,6 @@
 package kr.org.dagather.domain.profile.entity;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,8 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.util.Assert;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -51,7 +47,7 @@ public class Profile {
 	private boolean gender;
 
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd")
-	@Column(name = "created_at", nullable = false)
+	@Column(name = "birth", nullable = false)
 	private LocalDate birth;
 
 	@Column(nullable = false)
