@@ -32,7 +32,7 @@ public class ProfileService {
 	private final S3Util s3Util;
 
 	@Transactional
-	public ProfileResponseDto save(ProfileRequestDto requestDto) {
+	public ProfileResponseDto saveProfile(ProfileRequestDto requestDto) {
 
 		Profile profile = profileRepository.findProfileByMemberId(requestDto.getMemberId())
 			.orElse(new Profile());
@@ -67,4 +67,22 @@ public class ProfileService {
 
 		return profileMapper.toResponseDto(profile, profilePurposes, profileInterests);
 	}
+
+	@Transactional
+	public ProfileResponseDto getProfile(String memberId) {
+		Profile profile = profileRepository.findProfileByMemberId(memberId).orElse(null);
+		if (profile == null) throw new CustomException(ErrorCode.PROFILE_NOT_FOUND);
+
+		List<ProfilePurpose> profilePurposes = profilePurposeRepository.findAllByProfile(profile);
+		List<ProfileInterest> profileInterests = profileInterestRepository.findAllByProfile(profile);
+
+		return profileMapper.toResponseDto(profile, profilePurposes, profileInterests);
+	}
+
+	// @Transactional
+	// public List<ProfileResponseDto> getProfileList(String filter) {
+	// 	// List<Profile> profileList = profileRepository.find
+	// 	return
+	// }
+
 }
