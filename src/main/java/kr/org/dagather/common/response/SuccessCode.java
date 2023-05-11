@@ -21,6 +21,9 @@ public enum SuccessCode {
 	ACCOUNT_READ_SUCCESS(OK, "계정 조회 성공"),
 	TOKEN_REISSUE_SUCCESS(OK, "토큰 재발급 성공"),
 
+	// 프로필
+	PROFILE_SAVE_SUCCESS(OK, "프로필 저장 성공"),
+
 	// 게시판
 	BOARD_POST_SUCCESS(CREATED, "글 작성 성공"),
 	ARTICLE_DELETE_SUCCESS(OK, "게시물 삭제 성공"),
