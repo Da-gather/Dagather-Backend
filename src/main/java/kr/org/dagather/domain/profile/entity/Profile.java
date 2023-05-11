@@ -38,10 +38,10 @@ public class Profile {
 	@Column(name = "member_id", nullable = false)
 	private String memberId;
 
-	@Column(nullable = false, columnDefinition = "VARCHAR(255) CHARACTER SET UTF8")
+	@Column(nullable = false)
 	private String resident;
 
-	@Column(nullable = false, columnDefinition = "VARCHAR(255) CHARACTER SET UTF8")
+	@Column(nullable = false)
 	private String name;
 
 	@Column(nullable = false)
@@ -60,7 +60,7 @@ public class Profile {
 	@Column(nullable = false)
 	private int rperiod;
 
-	@Column(columnDefinition = "TEXT CHARACTER SET UTF8", nullable = false)
+	@Column(nullable = false)
 	private String introduction;
 
 	@Builder
