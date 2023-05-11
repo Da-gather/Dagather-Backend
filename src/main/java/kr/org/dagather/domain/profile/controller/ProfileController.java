@@ -1,9 +1,15 @@
 package kr.org.dagather.domain.profile.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import kr.org.dagather.common.response.ApiResponse;
@@ -23,8 +29,21 @@ public class ProfileController {
 	private final ProfileService profileService;
 
 	@PutMapping("")
-	public ApiResponse<ProfileResponseDto> save(@Valid ProfileRequestDto requestDto) {
-		ProfileResponseDto responseDto = profileService.save(requestDto);
+	public ApiResponse<ProfileResponseDto> saveProfile(@Valid ProfileRequestDto requestDto) {
+		ProfileResponseDto responseDto = profileService.saveProfile(requestDto);
 		return ApiResponse.success(SuccessCode.PROFILE_SAVE_SUCCESS, responseDto);
 	}
+
+	@GetMapping("/{memberId}")
+	public ApiResponse<ProfileResponseDto> getProfile(@PathVariable String memberId){
+		ProfileResponseDto responseDto = profileService.getProfile(memberId);
+		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDto);
+	}
+
+	// @GetMapping("/list")
+	// public ApiResponse<List<ProfileResponseDto>> getProfileList(@RequestParam String filter) {
+	// 	List<ProfileResponseDto> responseDtoList = profileService.getProfileList(filter);
+	// 	return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDtoList);
+	// }
+
 }
