@@ -52,4 +52,10 @@ public class ProfileRequestDto {
 	@Size(min = 1, message = "관심사는 1개 이상 등록되어야 합니다")
 	private List<String> interests;
 
+	@NotNull(message = "경도가 없습니다.")
+	private float longitude;
+
+	@NotNull(message = "위도가 없습니다.")
+	private float latitude;
+
 }
