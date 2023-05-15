@@ -25,7 +25,8 @@ public enum SuccessCode {
 	PROFILE_SAVE_SUCCESS(OK, "프로필 저장 성공"),
 
 	// 미션
-	MISSION_SAVE_SUCCESS(OK, "미션 생성 성공"),
+	MISSION_SAVE_SUCCESS(OK, "미션 추가 성공"),
+	MISSION_CREATE_SUCCESS(OK, "미션 생성 성공"),
 
 	// 게시판
 	BOARD_POST_SUCCESS(CREATED, "글 작성 성공"),
