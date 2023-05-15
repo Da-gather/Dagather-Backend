@@ -98,4 +98,13 @@ public class FriendService {
 
 		return result;
 	}
+
+	@Transactional
+	public List<FriendChatroomResponseDto> getFriendList(String memberId) {
+		List<Friend> friends = friendRepository.findFriendsByMemberId(memberId);
+		List<FriendChatroomResponseDto> result = friends.stream()
+			.map(friendChatroomMapper::toResponseDto).collect(Collectors.toList());
+
+		return result;
+	}
 }
