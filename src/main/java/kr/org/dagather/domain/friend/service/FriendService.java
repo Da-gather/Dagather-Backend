@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.org.dagather.common.exception.CustomException;
+import kr.org.dagather.common.exception.DuplicateException;
 import kr.org.dagather.common.exception.NotFoundException;
 import kr.org.dagather.common.exception.NumberFormatException;
 import kr.org.dagather.common.response.ErrorCode;
@@ -60,6 +61,8 @@ public class FriendService {
 	public FriendChatroomResponseDto setChatroom(FriendChatroomRequestDto requestDto) {
 		Friend friend = friendRepository.findFriendById(requestDto.getFriendId());
 		if (friend == null) throw new NotFoundException(ErrorCode.FRIEND_NOT_FOUND);
+		if (friendRepository.existsByChatroomId(requestDto.getChatroomId()))
+			throw new DuplicateException(ErrorCode.DUPLICATED_CHATROOM);
 
 		friend.setChatroomId(requestDto.getChatroomId());
 

@@ -19,6 +19,7 @@ public enum ErrorCode {
 
 	// friend
 	DUPLICATED_FRIEND(BAD_REQUEST, "이미 존재하는 친구입니다."),
+	DUPLICATED_CHATROOM(BAD_REQUEST, "이미 존재하는 채팅방입니다."),
 
 	// 파일
 	BAD_FILE_NAME(BAD_REQUEST, "파일 이름이 올바르지 않습니다."),
