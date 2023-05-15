@@ -62,4 +62,10 @@ public class FriendController {
 		List<FriendResponseDto> responseDtoList = friendService.getRequestList(memberId, requestBy);
 		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDtoList);
 	}
+
+	@GetMapping("/list/{memberId}")
+	public ApiResponse<List<FriendChatroomResponseDto>> getFriendList(@PathVariable String memberId) {
+		List<FriendChatroomResponseDto> responseDtoList = friendService.getFriendList(memberId);
+		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDtoList);
+	}
 }
