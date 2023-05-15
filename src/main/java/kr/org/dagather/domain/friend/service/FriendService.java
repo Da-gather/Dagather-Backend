@@ -48,4 +48,18 @@ public class FriendService {
 			throw new NumberFormatException(ErrorCode.BAD_PARAMETER_TYPE);
 		}
 	}
+
+	@Transactional
+	public Long rejectFriend(String friendId) {
+		try {
+			Long id = Long.parseLong(friendId);
+			Friend friend = friendRepository.findFriendById(id);
+			if (friend == null) throw new NotFoundException(ErrorCode.FRIEND_NOT_FOUND);
+
+			friendRepository.delete(friend);
+			return friend.getId();
+		} catch (NumberFormatException e) {
+			throw new NumberFormatException(ErrorCode.BAD_PARAMETER_TYPE);
+		}
+	}
 }
