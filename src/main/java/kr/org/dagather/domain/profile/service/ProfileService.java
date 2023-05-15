@@ -13,9 +13,11 @@ import kr.org.dagather.common.util.S3Util;
 import kr.org.dagather.domain.profile.dto.ProfileMapper;
 import kr.org.dagather.domain.profile.dto.ProfileRequestDto;
 import kr.org.dagather.domain.profile.dto.ProfileResponseDto;
+import kr.org.dagather.domain.profile.entity.Location;
 import kr.org.dagather.domain.profile.entity.Profile;
 import kr.org.dagather.domain.profile.entity.ProfileInterest;
 import kr.org.dagather.domain.profile.entity.ProfilePurpose;
+import kr.org.dagather.domain.profile.repository.LocationRepository;
 import kr.org.dagather.domain.profile.repository.ProfileInterestRepository;
 import kr.org.dagather.domain.profile.repository.ProfilePurposeRepository;
 import kr.org.dagather.domain.profile.repository.ProfileRepository;
@@ -28,6 +30,7 @@ public class ProfileService {
 	private final ProfileRepository profileRepository;
 	private final ProfilePurposeRepository profilePurposeRepository;
 	private final ProfileInterestRepository profileInterestRepository;
+	private final LocationRepository locationRepository;
 	private final ProfileMapper profileMapper;
 	private final S3Util s3Util;
 
@@ -64,6 +67,12 @@ public class ProfileService {
 			}
 		});
 		List<ProfileInterest> profileInterests = profileInterestRepository.findAllByProfile(profile);
+
+		locationRepository.save(Location.builder()
+			.memberId(requestDto.getMemberId())
+			.longitude(requestDto.getLongitude())
+			.latitude(requestDto.getLatitude())
+			.build());
 
 		return profileMapper.toResponseDto(profile, profilePurposes, profileInterests);
 	}

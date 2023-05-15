@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
-	private final String host = "http://43.201.121.220";
+	private final String host = "http://43.201.121.220:8080";
 	private final String localhost = "http://localhost:";
 	private final int allowedMinPort = 3000;
 	private final int allowedMaxPort = 3010;
