@@ -7,9 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.org.dagather.common.exception.CustomException;
+import kr.org.dagather.common.exception.DuplicateException;
 import kr.org.dagather.common.exception.NotFoundException;
 import kr.org.dagather.common.exception.NumberFormatException;
 import kr.org.dagather.common.response.ErrorCode;
+import kr.org.dagather.domain.friend.dto.FriendChatroomMapper;
+import kr.org.dagather.domain.friend.dto.FriendChatroomRequestDto;
+import kr.org.dagather.domain.friend.dto.FriendChatroomResponseDto;
 import kr.org.dagather.domain.friend.dto.FriendMapper;
 import kr.org.dagather.domain.friend.dto.FriendRequestDto;
 import kr.org.dagather.domain.friend.dto.FriendResponseDto;
@@ -23,6 +27,7 @@ public class FriendService {
 
 	private final FriendRepository friendRepository;
 	private final FriendMapper friendMapper;
+	private final FriendChatroomMapper friendChatroomMapper;
 
 	@Transactional
 	public FriendResponseDto requestFriend(FriendRequestDto requestDto) {
@@ -50,6 +55,18 @@ public class FriendService {
 		} catch (NumberFormatException e) {
 			throw new NumberFormatException(ErrorCode.BAD_PARAMETER_TYPE);
 		}
+	}
+
+	@Transactional
+	public FriendChatroomResponseDto setChatroom(FriendChatroomRequestDto requestDto) {
+		Friend friend = friendRepository.findFriendById(requestDto.getFriendId());
+		if (friend == null) throw new NotFoundException(ErrorCode.FRIEND_NOT_FOUND);
+		if (friendRepository.existsByChatroomId(requestDto.getChatroomId()))
+			throw new DuplicateException(ErrorCode.DUPLICATED_CHATROOM);
+
+		friend.setChatroomId(requestDto.getChatroomId());
+
+		return friendChatroomMapper.toResponseDto(friend);
 	}
 
 	@Transactional

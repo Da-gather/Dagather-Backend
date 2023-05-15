@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.org.dagather.common.response.ApiResponse;
 import kr.org.dagather.common.response.SuccessCode;
+import kr.org.dagather.domain.friend.dto.FriendChatroomMapper;
+import kr.org.dagather.domain.friend.dto.FriendChatroomRequestDto;
+import kr.org.dagather.domain.friend.dto.FriendChatroomResponseDto;
 import kr.org.dagather.domain.friend.dto.FriendRequestDto;
 import kr.org.dagather.domain.friend.dto.FriendResponseDto;
 import kr.org.dagather.domain.friend.service.FriendService;
@@ -39,6 +42,12 @@ public class FriendController {
 	public ApiResponse<FriendResponseDto> acceptFriend(@PathVariable String friendId) {
 		FriendResponseDto responseDto = friendService.acceptFriend(friendId);
 		return ApiResponse.success(SuccessCode.ACCEPT_FRIEND_SUCCESS, responseDto);
+	}
+
+	@PatchMapping("/chatroom")
+	public ApiResponse<FriendChatroomResponseDto> setChatroom(@Valid @RequestBody FriendChatroomRequestDto requestDto) {
+		FriendChatroomResponseDto responseDto = friendService.setChatroom(requestDto);
+		return ApiResponse.success(SuccessCode.SET_CHATROOM_SUCCESS, responseDto);
 	}
 
 	@DeleteMapping("/{friendId}")

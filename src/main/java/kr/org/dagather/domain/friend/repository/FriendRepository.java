@@ -14,4 +14,6 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
 	List<Friend> findFriendsBySenderAndAreWeFriendFalse(String sender);
 	List<Friend> findFriendsByReceiverAndAreWeFriendFalse(String receiver);
+
+	boolean existsByChatroomId(String chatroomId);
 }
