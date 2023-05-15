@@ -16,6 +16,9 @@ public enum ErrorCode {
 	NO_ID(BAD_REQUEST, "존재하지 않는 id 입니다"),
 	BAD_PARAMETER(BAD_REQUEST, "요청 파라미터가 잘못되었습니다."),
 
+	// friend
+	DUPLICATED_FRIEND(BAD_REQUEST, "이미 존재하는 친구입니다."),
+
 	// 파일
 	BAD_FILE_NAME(BAD_REQUEST, "파일 이름이 올바르지 않습니다."),
 	BAD_FILE_EXTENSION(BAD_REQUEST, "지원하지 않는 파일 형식입니다."),
