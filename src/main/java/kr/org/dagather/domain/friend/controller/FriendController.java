@@ -2,6 +2,7 @@ package kr.org.dagather.domain.friend.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,5 +36,11 @@ public class FriendController {
 	public ApiResponse<FriendResponseDto> acceptFriend(@PathVariable String friendId) {
 		FriendResponseDto responseDto = friendService.acceptFriend(friendId);
 		return ApiResponse.success(SuccessCode.ACCEPT_FRIEND_SUCCESS, responseDto);
+	}
+
+	@DeleteMapping("/{friendId}")
+	public ApiResponse<Long> rejectFriend(@PathVariable String friendId) {
+		Long deletedId = friendService.rejectFriend(friendId);
+		return ApiResponse.success(SuccessCode.REJECT_FRIEND_SUCCESS, deletedId);
 	}
 }
