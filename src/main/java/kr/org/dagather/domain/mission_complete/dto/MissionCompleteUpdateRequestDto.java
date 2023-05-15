@@ -1,5 +1,6 @@
 package kr.org.dagather.domain.mission_complete.dto;
 
+import kr.org.dagather.domain.mission.entity.Mission;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class MissionCompleteUpdateRequestDto {
+    private Mission missionId;
     private Integer memberId1;
     private Integer memberId2;
     private Boolean complete1;

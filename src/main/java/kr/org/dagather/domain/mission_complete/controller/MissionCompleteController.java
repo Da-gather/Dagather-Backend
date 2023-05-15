@@ -2,9 +2,7 @@ package kr.org.dagather.domain.mission_complete.controller;
 
 import kr.org.dagather.common.response.ApiResponse;
 import kr.org.dagather.common.response.SuccessCode;
-import kr.org.dagather.domain.mission_complete.dto.MissionCompleteResponseDto;
-import kr.org.dagather.domain.mission_complete.dto.MissionCompleteSaveRequestDto;
-import kr.org.dagather.domain.mission_complete.dto.MissionCompleteUpdateRequestDto;
+import kr.org.dagather.domain.mission_complete.dto.*;
 import kr.org.dagather.domain.mission_complete.entity.MissionComplete;
 import kr.org.dagather.domain.mission_complete.repository.MissionCompleteRepository;
 import kr.org.dagather.domain.mission_complete.service.MissionCompleteService;
@@ -21,23 +19,18 @@ public class MissionCompleteController {
     private final MissionCompleteRepository missionCompleteRepository;
 
     @PostMapping("")
-    public ApiResponse<MissionComplete> save(@RequestBody MissionCompleteSaveRequestDto requestDto) {
+    public ApiResponse<MissionCompleteSaveResponseDto> save(@RequestBody MissionCompleteSaveRequestDto requestDto) {
         return ApiResponse.success(SuccessCode.MISSION_CREATE_SUCCESS, missionCompleteService.save(requestDto));
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public List<MissionComplete> findByMemberIds(@RequestParam("memberId1") Integer memberId1, @RequestParam("memberId2") Integer memberId2) {
-        return missionCompleteRepository.findByMemberIds(memberId1, memberId2);
+    public ApiResponse<List<MissionCompleteResponseDto>> getCompletedMissions(@RequestParam("memberId1") Integer memberId1, @RequestParam("memberId2") Integer memberId2) {
+         return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findByMemberIds(memberId1, memberId2));
     }
 
-//    @RequestMapping(value = "", method = RequestMethod.GET)
-//    public MissionCompleteResponseDto findByMemberIds(@RequestParam("memberId1") Integer memberId1, @RequestParam("memberId2") Integer memberId2) {
-//        return missionCompleteService.findByMemberIds(memberId1, memberId2);
-//    }
-
     @PatchMapping("")
-    public String update(@RequestBody MissionCompleteUpdateRequestDto requestDto) {
-        return missionCompleteService.update(requestDto);
+    public ApiResponse<MissionCompleteUpdateResponseDto> update(@RequestBody MissionCompleteUpdateRequestDto requestDto) {
+        return ApiResponse.success(SuccessCode.MISSION_COMPLETE_SUCCESS, missionCompleteService.update(requestDto));
     }
 
 }
