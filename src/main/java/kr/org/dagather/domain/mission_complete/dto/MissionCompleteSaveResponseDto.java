@@ -15,6 +15,6 @@ public class MissionCompleteSaveResponseDto {
         this.mission = requestDto.getMissionId().getMission();
         this.category = requestDto.getMissionId().getCategory();
         this.complete1 = requestDto.getComplete1();
-        this.complete1 = requestDto.getComplete2();
+        this.complete2 = requestDto.getComplete2();
     }
 }
