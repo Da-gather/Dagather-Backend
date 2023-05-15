@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class FriendResponseDto {
+	private Long friendId;
 	private String sender;
 	private String receiver;
 	private boolean areWeFriend;

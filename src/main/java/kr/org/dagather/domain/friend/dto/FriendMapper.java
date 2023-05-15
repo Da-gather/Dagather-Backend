@@ -14,6 +14,7 @@ public class FriendMapper {
 			throw new NullPointerException();
 
 		FriendResponseDto.FriendResponseDtoBuilder builder = FriendResponseDto.builder();
+		builder.friendId(friend.getId());
 		builder.sender(friend.getSender());
 		builder.receiver(friend.getReceiver());
 		builder.areWeFriend(friend.isAreWeFriend());
