@@ -2,6 +2,8 @@ package kr.org.dagather.domain.friend.controller;
 
 import javax.validation.Valid;
 
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,5 +29,11 @@ public class FriendController {
 	public ApiResponse<FriendResponseDto> requestFriend(@Valid @RequestBody FriendRequestDto requestDto) {
 		FriendResponseDto responseDto = friendService.requestFriend(requestDto);
 		return ApiResponse.success(SuccessCode.FRIEND_CREATE_SUCCESS, responseDto);
+	}
+
+	@PatchMapping("/{friendId}")
+	public ApiResponse<FriendResponseDto> acceptFriend(@PathVariable String friendId) {
+		FriendResponseDto responseDto = friendService.acceptFriend(friendId);
+		return ApiResponse.success(SuccessCode.ACCEPT_FRIEND_SUCCESS, responseDto);
 	}
 }

@@ -15,6 +15,7 @@ public enum ErrorCode {
 	// general
 	NO_ID(BAD_REQUEST, "존재하지 않는 id 입니다"),
 	BAD_PARAMETER(BAD_REQUEST, "요청 파라미터가 잘못되었습니다."),
+	BAD_PARAMETER_TYPE(BAD_REQUEST, "지원하지 않는 파라미터 형식입니다."),
 
 	// friend
 	DUPLICATED_FRIEND(BAD_REQUEST, "이미 존재하는 친구입니다."),
@@ -32,6 +33,7 @@ public enum ErrorCode {
 	TOKEN_NOT_FOUND(NOT_FOUND, "다시 로그인해주세요."),
 	PROFILE_NOT_FOUND(NOT_FOUND, "유저의 프로필 정보가 존재하지 않습니다."),
 	PROFILE_PURPOSE_NOT_FOUND(NOT_FOUND, "가입목적 정보가 존재하지 않습니다"),
+	FRIEND_NOT_FOUND(NOT_FOUND, "친구 정보가 존재하지 않습니다."),
 
 	/* 500 INTERNAL_SERVER_ERROR : 서버 오류 */
 	FILE_UPLOAD_FAIL(INTERNAL_SERVER_ERROR, "파일 업로드에 실패했습니다."),

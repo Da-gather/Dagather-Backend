@@ -29,6 +29,9 @@ public enum SuccessCode {
 	ARTICLE_DELETE_SUCCESS(OK, "게시물 삭제 성공"),
 	COMMENT_DELETE_SUCCESS(OK, "댓글 삭제 성공"),
 
+	// 친구
+	ACCEPT_FRIEND_SUCCESS(OK, "친구 수락 성공"),
+
 	/* 201 CREATED */
 	FRIEND_CREATE_SUCCESS(CREATED, "친구 신청 성공");
 
