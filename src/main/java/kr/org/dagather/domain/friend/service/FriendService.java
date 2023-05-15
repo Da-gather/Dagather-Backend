@@ -1,5 +1,8 @@
 package kr.org.dagather.domain.friend.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -61,5 +64,21 @@ public class FriendService {
 		} catch (NumberFormatException e) {
 			throw new NumberFormatException(ErrorCode.BAD_PARAMETER_TYPE);
 		}
+	}
+
+	@Transactional
+	public List<FriendResponseDto> getRequestList(String memberId, String requestBy) {
+		List<Friend> friends;
+		if ("1".equals(requestBy)) {
+			friends = friendRepository.findFriendsBySenderAndAreWeFriendFalse(memberId);
+		} else if ("0".equals(requestBy)) {
+			friends = friendRepository.findFriendsByReceiverAndAreWeFriendFalse(memberId);
+		} else {
+			throw new CustomException(ErrorCode.BAD_PARAMETER);
+		}
+		List<FriendResponseDto> result = friends.stream()
+			.map(friendMapper::toResponseDto).collect(Collectors.toList());
+
+		return result;
 	}
 }

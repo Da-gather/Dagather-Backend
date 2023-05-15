@@ -34,7 +34,7 @@ public enum SuccessCode {
 
 	// 친구
 	ACCEPT_FRIEND_SUCCESS(OK, "친구 수락 성공"),
-	REJECT_FRIEND_SUCCESS(OK, "친구 거절 성공"),
+	REJECT_FRIEND_SUCCESS(OK, "친구 삭제 성공"),
 
 	/* 201 CREATED */
 	FRIEND_CREATE_SUCCESS(CREATED, "친구 신청 성공");
