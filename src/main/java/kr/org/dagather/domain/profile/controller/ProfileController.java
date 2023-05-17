@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.org.dagather.common.response.ApiResponse;
 import kr.org.dagather.common.response.SuccessCode;
+import kr.org.dagather.domain.profile.dto.ProfileGetResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileRequestDto;
 import kr.org.dagather.domain.profile.dto.ProfileResponseDto;
 import kr.org.dagather.domain.profile.service.ProfileService;
@@ -35,8 +36,8 @@ public class ProfileController {
 	}
 
 	@GetMapping("/{memberId}")
-	public ApiResponse<ProfileResponseDto> getProfile(@PathVariable String memberId){
-		ProfileResponseDto responseDto = profileService.getProfile(memberId);
+	public ApiResponse<ProfileGetResponseDto> getProfile(@PathVariable String memberId){
+		ProfileGetResponseDto responseDto = profileService.getProfile(memberId);
 		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDto);
 	}
 

@@ -1,16 +1,21 @@
 package kr.org.dagather.domain.profile.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.org.dagather.common.exception.CustomException;
+import kr.org.dagather.common.filter.AuthFilter;
 import kr.org.dagather.common.response.ErrorCode;
 import kr.org.dagather.common.util.S3Util;
+import kr.org.dagather.domain.friend.repository.FriendRepository;
+import kr.org.dagather.domain.profile.dto.ProfileGetResponseDto;
+import kr.org.dagather.domain.profile.dto.ProfileInterestDto;
 import kr.org.dagather.domain.profile.dto.ProfileMapper;
+import kr.org.dagather.domain.profile.dto.ProfilePurposeDto;
 import kr.org.dagather.domain.profile.dto.ProfileRequestDto;
 import kr.org.dagather.domain.profile.dto.ProfileResponseDto;
 import kr.org.dagather.domain.profile.entity.Location;
@@ -30,6 +35,7 @@ public class ProfileService {
 	private final ProfileRepository profileRepository;
 	private final ProfilePurposeRepository profilePurposeRepository;
 	private final ProfileInterestRepository profileInterestRepository;
+	private final FriendRepository friendRepository;
 	private final LocationRepository locationRepository;
 	private final ProfileMapper profileMapper;
 	private final S3Util s3Util;
@@ -54,6 +60,7 @@ public class ProfileService {
 
 		profileRepository.save(profile);
 
+		// profilePurposeRepository.deleteAllByProfile(profile);
 		requestDto.getPurposes().forEach(p -> {
 			if (!profilePurposeRepository.existsByProfileAndPurpose(profile, p)) {
 				profilePurposeRepository.save(ProfilePurpose.builder().profile(profile).purpose(p).build());
@@ -61,6 +68,7 @@ public class ProfileService {
 		});
 		List<ProfilePurpose> profilePurposes = profilePurposeRepository.findAllByProfile(profile);
 
+		// profileInterestRepository.deleteAllByProfile(profile);
 		requestDto.getInterests().forEach(i -> {
 			if (!profileInterestRepository.existsByProfileAndInterest(profile, i)) {
 				profileInterestRepository.save(ProfileInterest.builder().profile(profile).interest(i).build());
@@ -78,14 +86,38 @@ public class ProfileService {
 	}
 
 	@Transactional
-	public ProfileResponseDto getProfile(String memberId) {
+	public ProfileGetResponseDto getProfile(String memberId) {
+
+		// get current user info
+		String currentMemberId = AuthFilter.getCurrentMemberId();
+
+		Profile myProfile = profileRepository.findProfileByMemberId(currentMemberId).orElse(null);
+		if (myProfile == null) throw new CustomException(ErrorCode.PROFILE_NOT_FOUND);
+
+		List<String> myPurposes = new ArrayList<>();
+		profilePurposeRepository.findAllByProfile(myProfile).forEach(p -> { myPurposes.add(p.getPurpose()); });
+
+		List<String> myInterests = new ArrayList<>();
+		profileInterestRepository.findAllByProfile(myProfile).forEach(i -> { myInterests.add(i.getInterest()); });
+
+		// get target user info
 		Profile profile = profileRepository.findProfileByMemberId(memberId).orElse(null);
 		if (profile == null) throw new CustomException(ErrorCode.PROFILE_NOT_FOUND);
 
 		List<ProfilePurpose> profilePurposes = profilePurposeRepository.findAllByProfile(profile);
 		List<ProfileInterest> profileInterests = profileInterestRepository.findAllByProfile(profile);
 
-		return profileMapper.toResponseDto(profile, profilePurposes, profileInterests);
+		// compare purposes and interests
+		List<ProfilePurposeDto> purposes = new ArrayList<>();
+		profilePurposes.forEach(p -> { purposes.add(new ProfilePurposeDto(p.getPurpose(), myPurposes.contains(p.getPurpose()))); });
+
+		List<ProfileInterestDto> interests = new ArrayList<>();
+		profileInterests.forEach(i -> { interests.add(new ProfileInterestDto(i.getInterest(), myInterests.contains(i.getInterest()))); });
+
+		// add are we friend
+		boolean areWeFriend = friendRepository.areWeFriend(currentMemberId, memberId);
+
+		return profileMapper.toGetResponseDto(profile, purposes, interests, areWeFriend);
 	}
 
 	// @Transactional
