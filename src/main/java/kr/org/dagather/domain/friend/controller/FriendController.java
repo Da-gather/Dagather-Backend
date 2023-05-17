@@ -56,16 +56,15 @@ public class FriendController {
 		return ApiResponse.success(SuccessCode.REJECT_FRIEND_SUCCESS, deletedId);
 	}
 
-	@GetMapping("/list/{memberId}/{requestBy}")
-	public ApiResponse<List<FriendResponseDto>> getRequestList(@PathVariable String memberId,
-		@PathVariable String requestBy) {
-		List<FriendResponseDto> responseDtoList = friendService.getRequestList(memberId, requestBy);
+	@GetMapping("/list/{requestBy}")
+	public ApiResponse<List<FriendResponseDto>> getRequestList(@PathVariable String requestBy) {
+		List<FriendResponseDto> responseDtoList = friendService.getRequestList(requestBy);
 		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDtoList);
 	}
 
-	@GetMapping("/list/{memberId}")
-	public ApiResponse<List<FriendChatroomResponseDto>> getFriendList(@PathVariable String memberId) {
-		List<FriendChatroomResponseDto> responseDtoList = friendService.getFriendList(memberId);
+	@GetMapping("/list")
+	public ApiResponse<List<FriendChatroomResponseDto>> getFriendList() {
+		List<FriendChatroomResponseDto> responseDtoList = friendService.getFriendList();
 		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDtoList);
 	}
 }
