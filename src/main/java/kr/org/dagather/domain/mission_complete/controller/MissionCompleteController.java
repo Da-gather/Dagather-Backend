@@ -41,4 +41,9 @@ public class MissionCompleteController {
     public ApiResponse<MissionCompleteCountResponseDto> getMissionStatistics(@RequestParam("memberId") Integer memberId) {
         return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.getMissionStatistics(memberId));
     }
+
+    @RequestMapping(value = "/recent10", method = RequestMethod.GET)
+    public ApiResponse<List<MissionCompleteResponseDto>> getRecent10(@RequestParam("memberId") Integer memberId) {
+        return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findRecent10CompleteMissions(memberId));
+    }
 }

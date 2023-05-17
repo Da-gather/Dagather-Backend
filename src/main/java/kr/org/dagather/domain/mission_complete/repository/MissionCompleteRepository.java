@@ -28,4 +28,7 @@ public interface MissionCompleteRepository extends JpaRepository<MissionComplete
         "where (member_id1=:memberId or member_id2=:memberId) and complete1=1 and complete2=1\n" +
         "group by category", nativeQuery = true)
     List<List<Integer>> getMissionCount(@Param("memberId") Integer memberId);
+
+    @Query(value = "select * from mission_complete where (member_id1=:memberId or member_id2=:memberId) and complete1 = true and complete2 = true limit 10", nativeQuery = true)
+    List<MissionComplete> findRecent10CompleteMissions(@Param("memberId") Integer memberId);
 }
