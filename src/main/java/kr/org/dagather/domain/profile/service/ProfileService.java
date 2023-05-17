@@ -91,6 +91,7 @@ public class ProfileService {
 
 		// get current user info
 		String currentMemberId = AuthFilter.getCurrentMemberId();
+		if (currentMemberId == null || currentMemberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
 		Profile myProfile = profileRepository.findProfileByMemberId(currentMemberId).orElse(null);
 		if (myProfile == null) throw new CustomException(ErrorCode.PROFILE_NOT_FOUND);
@@ -126,6 +127,7 @@ public class ProfileService {
 
 		// get current user info
 		String currentMemberId = AuthFilter.getCurrentMemberId();
+		if (currentMemberId == null || currentMemberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
 		Profile myProfile = profileRepository.findProfileByMemberId(currentMemberId).orElse(null);
 		if (myProfile == null) throw new CustomException(ErrorCode.PROFILE_NOT_FOUND);
