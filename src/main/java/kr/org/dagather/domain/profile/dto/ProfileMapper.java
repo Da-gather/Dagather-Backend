@@ -41,7 +41,7 @@ public class ProfileMapper {
 		return builder.build();
 	}
 
-	public ProfileGetResponseDto toGetResponseDto(Profile profile, List<ProfilePurposeDto> profilePurposes, List<ProfileInterestDto> profileInterests) {
+	public ProfileGetResponseDto toGetResponseDto(Profile profile, List<ProfilePurposeDto> profilePurposes, List<ProfileInterestDto> profileInterests, boolean areWeFriend) {
 		if (profile == null || profilePurposes == null || profileInterests == null)
 			throw new NullPointerException();
 
@@ -58,6 +58,7 @@ public class ProfileMapper {
 		builder.introduction(profile.getIntroduction());
 		builder.purposes(profilePurposes);
 		builder.interests(profileInterests);
+		builder.areWeFriend(areWeFriend);
 
 		return builder.build();
 	}

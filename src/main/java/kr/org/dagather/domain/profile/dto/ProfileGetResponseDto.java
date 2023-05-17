@@ -21,4 +21,5 @@ public class ProfileGetResponseDto {
 	private String introduction;
 	private List<ProfilePurposeDto> purposes;
 	private List<ProfileInterestDto> interests;
+	private boolean areWeFriend;
 }

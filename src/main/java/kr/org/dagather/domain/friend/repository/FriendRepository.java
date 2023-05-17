@@ -13,11 +13,11 @@ public interface FriendRepository extends JpaRepository<Friend, Long> {
 
 	boolean existsBySenderAndReceiver(String sender, String receiver);
 	Friend findFriendById(Long id);
-
 	List<Friend> findFriendsBySenderAndAreWeFriendFalse(String sender);
 	List<Friend> findFriendsByReceiverAndAreWeFriendFalse(String receiver);
 	@Query("select f from Friend f where f.areWeFriend = true and (f.sender = :memberId or f.receiver = :memberId)")
 	List<Friend> findFriendsByMemberId(@Param("memberId") String memberId);
-
 	boolean existsByChatroomId(String chatroomId);
+	@Query("select f.areWeFriend from Friend f where (f.sender = :me and f.receiver = :you) or (f.sender = :you and f.receiver = :me)")
+	boolean areWeFriend(@Param("me") String me, @Param("you") String you);
 }

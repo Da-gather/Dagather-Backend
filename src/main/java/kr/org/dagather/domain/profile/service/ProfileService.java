@@ -1,7 +1,6 @@
 package kr.org.dagather.domain.profile.service;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,6 +11,7 @@ import kr.org.dagather.common.exception.CustomException;
 import kr.org.dagather.common.filter.AuthFilter;
 import kr.org.dagather.common.response.ErrorCode;
 import kr.org.dagather.common.util.S3Util;
+import kr.org.dagather.domain.friend.repository.FriendRepository;
 import kr.org.dagather.domain.profile.dto.ProfileGetResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileInterestDto;
 import kr.org.dagather.domain.profile.dto.ProfileMapper;
@@ -35,6 +35,7 @@ public class ProfileService {
 	private final ProfileRepository profileRepository;
 	private final ProfilePurposeRepository profilePurposeRepository;
 	private final ProfileInterestRepository profileInterestRepository;
+	private final FriendRepository friendRepository;
 	private final LocationRepository locationRepository;
 	private final ProfileMapper profileMapper;
 	private final S3Util s3Util;
@@ -113,7 +114,10 @@ public class ProfileService {
 		List<ProfileInterestDto> interests = new ArrayList<>();
 		profileInterests.forEach(i -> { interests.add(new ProfileInterestDto(i.getInterest(), myInterests.contains(i.getInterest()))); });
 
-		return profileMapper.toGetResponseDto(profile, purposes, interests);
+		// add are we friend
+		boolean areWeFriend = friendRepository.areWeFriend(currentMemberId, memberId);
+
+		return profileMapper.toGetResponseDto(profile, purposes, interests, areWeFriend);
 	}
 
 	// @Transactional
