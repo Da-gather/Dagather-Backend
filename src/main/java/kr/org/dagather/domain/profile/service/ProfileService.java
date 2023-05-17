@@ -60,7 +60,7 @@ public class ProfileService {
 
 		profileRepository.save(profile);
 
-		// profilePurposeRepository.deleteAllByProfile(profile);
+		profilePurposeRepository.deleteAllByProfile(profile);
 		requestDto.getPurposes().forEach(p -> {
 			if (!profilePurposeRepository.existsByProfileAndPurpose(profile, p)) {
 				profilePurposeRepository.save(ProfilePurpose.builder().profile(profile).purpose(p).build());
@@ -68,7 +68,7 @@ public class ProfileService {
 		});
 		List<ProfilePurpose> profilePurposes = profilePurposeRepository.findAllByProfile(profile);
 
-		// profileInterestRepository.deleteAllByProfile(profile);
+		profileInterestRepository.deleteAllByProfile(profile);
 		requestDto.getInterests().forEach(i -> {
 			if (!profileInterestRepository.existsByProfileAndInterest(profile, i)) {
 				profileInterestRepository.save(ProfileInterest.builder().profile(profile).interest(i).build());

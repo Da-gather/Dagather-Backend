@@ -12,4 +12,5 @@ public interface ProfilePurposeRepository extends JpaRepository<ProfilePurpose, 
 
 	List<ProfilePurpose> findAllByProfile(Profile profile);
 	boolean existsByProfileAndPurpose(Profile profile, String purpose);
+	void deleteAllByProfile(Profile profile);
 }
