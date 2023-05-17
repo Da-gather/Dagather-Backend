@@ -73,6 +73,15 @@ public class MissionCompleteService {
         return responseDto;
     }
 
+    public List<MissionCompleteResponseDto> findRecent10CompleteMissions(Integer memberId) {
+        List<MissionComplete> entity = missionCompleteRepository.findRecent10CompleteMissions(memberId);
+        List<MissionCompleteResponseDto> responseDto = new ArrayList<>();
+        for(MissionComplete missionComplete : entity){
+            responseDto.add(new MissionCompleteResponseDto(missionComplete));
+        }
+        return responseDto;
+    }
+
     @Transactional
     public MissionCompleteUpdateResponseDto update(MissionCompleteUpdateRequestDto requestDto) {
         
