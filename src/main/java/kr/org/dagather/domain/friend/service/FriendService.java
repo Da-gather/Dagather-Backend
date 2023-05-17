@@ -87,6 +87,8 @@ public class FriendService {
 	@Transactional
 	public List<FriendResponseDto> getRequestList(String requestBy) {
 		String memberId = AuthFilter.getCurrentMemberId();
+		if (memberId == null || memberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
+
 		List<Friend> friends;
 		if ("1".equals(requestBy)) {
 			friends = friendRepository.findFriendsBySenderAndAreWeFriendFalse(memberId);
@@ -104,6 +106,8 @@ public class FriendService {
 	@Transactional
 	public List<FriendChatroomResponseDto> getFriendList() {
 		String memberId = AuthFilter.getCurrentMemberId();
+		if (memberId == null || memberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
+
 		List<Friend> friends = friendRepository.findFriendsByMemberId(memberId);
 		List<FriendChatroomResponseDto> result = friends.stream()
 			.map(friendChatroomMapper::toResponseDto).collect(Collectors.toList());
