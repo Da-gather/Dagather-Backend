@@ -22,4 +22,10 @@ public interface MissionCompleteRepository extends JpaRepository<MissionComplete
 
     @Query(value = "select * from mission_complete where (member_id1=:memberId or member_id2=:memberId) and (ISNULL(complete1) or ISNULL(complete2))", nativeQuery = true)
     List<MissionComplete> findOngoingMissions(@Param("memberId") Integer memberId);
+
+    @Query(value = "select category, count(*)\n" +
+        "from mission_complete mc join mission m on m.id = mc.mission_id\n" +
+        "where (member_id1=:memberId or member_id2=:memberId) and complete1=1 and complete2=1\n" +
+        "group by category", nativeQuery = true)
+    List<List<Integer>> getMissionCount(@Param("memberId") Integer memberId);
 }

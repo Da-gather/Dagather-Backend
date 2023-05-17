@@ -36,4 +36,9 @@ public class MissionCompleteController {
     public ApiResponse<List<MissionCompleteResponseDto>> getOngoingMissions(@RequestParam("memberId") Integer memberId) {
         return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findOngoingMissions(memberId));
     }
+
+    @RequestMapping(value = "/statistics", method = RequestMethod.GET)
+    public ApiResponse<MissionCompleteCountResponseDto> getMissionStatistics(@RequestParam("memberId") Integer memberId) {
+        return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.getMissionStatistics(memberId));
+    }
 }
