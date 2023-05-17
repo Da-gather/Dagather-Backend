@@ -10,4 +10,5 @@ import kr.org.dagather.domain.profile.entity.ProfileInterest;
 public interface ProfileInterestRepository extends JpaRepository<ProfileInterest, Long> {
 	List<ProfileInterest> findAllByProfile(Profile profile);
 	boolean existsByProfileAndInterest(Profile profile, String interest);
+	void deleteAllByProfile(Profile profile);
 }
