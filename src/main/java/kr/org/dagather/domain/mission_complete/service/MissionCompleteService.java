@@ -67,6 +67,12 @@ public class MissionCompleteService {
         return responseDto;
     }
 
+    public MissionCompleteCountResponseDto getMissionStatistics(Integer memberId) {
+        List<List<Integer>> entity = missionCompleteRepository.getMissionCount(memberId);
+        MissionCompleteCountResponseDto responseDto = new MissionCompleteCountResponseDto(entity);
+        return responseDto;
+    }
+
     @Transactional
     public MissionCompleteUpdateResponseDto update(MissionCompleteUpdateRequestDto requestDto) {
         
