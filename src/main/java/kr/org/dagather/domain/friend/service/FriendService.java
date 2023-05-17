@@ -10,6 +10,7 @@ import kr.org.dagather.common.exception.CustomException;
 import kr.org.dagather.common.exception.DuplicateException;
 import kr.org.dagather.common.exception.NotFoundException;
 import kr.org.dagather.common.exception.NumberFormatException;
+import kr.org.dagather.common.filter.AuthFilter;
 import kr.org.dagather.common.response.ErrorCode;
 import kr.org.dagather.domain.friend.dto.FriendChatroomMapper;
 import kr.org.dagather.domain.friend.dto.FriendChatroomRequestDto;
@@ -84,7 +85,8 @@ public class FriendService {
 	}
 
 	@Transactional
-	public List<FriendResponseDto> getRequestList(String memberId, String requestBy) {
+	public List<FriendResponseDto> getRequestList(String requestBy) {
+		String memberId = AuthFilter.getCurrentMemberId();
 		List<Friend> friends;
 		if ("1".equals(requestBy)) {
 			friends = friendRepository.findFriendsBySenderAndAreWeFriendFalse(memberId);
@@ -100,7 +102,8 @@ public class FriendService {
 	}
 
 	@Transactional
-	public List<FriendChatroomResponseDto> getFriendList(String memberId) {
+	public List<FriendChatroomResponseDto> getFriendList() {
+		String memberId = AuthFilter.getCurrentMemberId();
 		List<Friend> friends = friendRepository.findFriendsByMemberId(memberId);
 		List<FriendChatroomResponseDto> result = friends.stream()
 			.map(friendChatroomMapper::toResponseDto).collect(Collectors.toList());
