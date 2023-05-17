@@ -62,4 +62,23 @@ public class ProfileMapper {
 
 		return builder.build();
 	}
+
+	public ProfileGetListResponseDto toGetResponseDto(Profile profile, List<ProfilePurposeDto> profilePurposes, List<ProfileInterestDto> profileInterests) {
+
+		ProfileGetListResponseDto.ProfileGetListResponseDtoBuilder builder = ProfileGetListResponseDto.builder();
+
+		builder.memberId(profile.getMemberId());
+		builder.resident(profile.getResident());
+		builder.name(profile.getName());
+		builder.imageUrl(profile.getImageUrl());
+		builder.gender(profile.isGender());
+		builder.birth(String.valueOf(profile.getBirth()));
+		builder.nationality(profile.getNationality());
+		builder.rperiod(profile.getRperiod());
+		builder.introduction(profile.getIntroduction());
+		builder.purposes(profilePurposes);
+		builder.interests(profileInterests);
+
+		return builder.build();
+	}
 }

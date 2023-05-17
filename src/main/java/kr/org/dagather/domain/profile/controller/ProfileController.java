@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.org.dagather.common.response.ApiResponse;
 import kr.org.dagather.common.response.SuccessCode;
+import kr.org.dagather.domain.profile.dto.ProfileGetListResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileGetResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileRequestDto;
 import kr.org.dagather.domain.profile.dto.ProfileResponseDto;
@@ -41,10 +42,10 @@ public class ProfileController {
 		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDto);
 	}
 
-	// @GetMapping("/list")
-	// public ApiResponse<List<ProfileResponseDto>> getProfileList(@RequestParam String filter) {
-	// 	List<ProfileResponseDto> responseDtoList = profileService.getProfileList(filter);
-	// 	return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDtoList);
-	// }
+	@GetMapping("/list")
+	public ApiResponse<List<ProfileGetListResponseDto>> getProfileList(@RequestParam String filter) {
+		List<ProfileGetListResponseDto> responseDtoList = profileService.getProfileList(filter);
+		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDtoList);
+	}
 
 }

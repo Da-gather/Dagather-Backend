@@ -12,6 +12,7 @@ import kr.org.dagather.common.filter.AuthFilter;
 import kr.org.dagather.common.response.ErrorCode;
 import kr.org.dagather.common.util.S3Util;
 import kr.org.dagather.domain.friend.repository.FriendRepository;
+import kr.org.dagather.domain.profile.dto.ProfileGetListResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileGetResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileInterestDto;
 import kr.org.dagather.domain.profile.dto.ProfileMapper;
@@ -120,10 +121,51 @@ public class ProfileService {
 		return profileMapper.toGetResponseDto(profile, purposes, interests, areWeFriend);
 	}
 
-	// @Transactional
-	// public List<ProfileResponseDto> getProfileList(String filter) {
-	// 	// List<Profile> profileList = profileRepository.find
-	// 	return
-	// }
+	@Transactional
+	public List<ProfileGetListResponseDto> getProfileList(String filter) {
+
+		// get current user info
+		String currentMemberId = AuthFilter.getCurrentMemberId();
+
+		Profile myProfile = profileRepository.findProfileByMemberId(currentMemberId).orElse(null);
+		if (myProfile == null) throw new CustomException(ErrorCode.PROFILE_NOT_FOUND);
+
+		List<String> myPurposes = new ArrayList<>();
+		profilePurposeRepository.findAllByProfile(myProfile).forEach(p -> { myPurposes.add(p.getPurpose()); });
+
+		List<String> myInterests = new ArrayList<>();
+		profileInterestRepository.findAllByProfile(myProfile).forEach(i -> { myInterests.add(i.getInterest()); });
+
+
+		// TODO: 추천시스템으로 요청 보내고 리스트 받기
+		List<Profile> profileList = profileRepository.findAll();
+		profileList.remove(myProfile);
+
+		List<ProfileGetListResponseDto> results = new ArrayList<>();
+
+		profileList.forEach(profile -> {
+			// get target user info
+			List<ProfilePurpose> profilePurposes = profilePurposeRepository.findAllByProfile(profile);
+			List<ProfileInterest> profileInterests = profileInterestRepository.findAllByProfile(profile);
+
+			// compare purposes and interests
+			List<ProfilePurposeDto> purposes = new ArrayList<>();
+			profilePurposes.forEach(p -> { purposes.add(new ProfilePurposeDto(p.getPurpose(), myPurposes.contains(p.getPurpose()))); });
+
+			List<ProfileInterestDto> interests = new ArrayList<>();
+			profileInterests.forEach(i -> { interests.add(new ProfileInterestDto(i.getInterest(), myInterests.contains(i.getInterest()))); });
+
+			results.add(profileMapper.toGetResponseDto(profile, purposes, interests));
+		});
+
+		//TODO: filtering
+		if (filter != null && filter.equals("nation")) {
+
+		} else if (filter != null && filter.equals("nearby")) {
+
+		}
+
+		return results;
+	}
 
 }
