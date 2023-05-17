@@ -1,8 +1,5 @@
 package kr.org.dagather.domain.mission_complete.service;
 
-import kr.org.dagather.common.exception.CustomException;
-import kr.org.dagather.common.response.ApiResponse;
-import kr.org.dagather.common.response.ErrorCode;
 import kr.org.dagather.domain.mission.entity.Mission;
 import kr.org.dagather.domain.mission.repository.MissionRepository;
 import kr.org.dagather.domain.mission_complete.dto.*;
@@ -15,7 +12,6 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -58,6 +54,15 @@ public class MissionCompleteService {
         List<MissionCompleteResponseDto> responseDto = new ArrayList<>();
         for(MissionComplete missionComplete : entity){
              responseDto.add(new MissionCompleteResponseDto(missionComplete));
+        }
+        return responseDto;
+    }
+
+    public List<MissionCompleteResponseDto> findOngoingMissions(Integer memberId) {
+        List<MissionComplete> entity = missionCompleteRepository.findOngoingMissions(memberId);
+        List<MissionCompleteResponseDto> responseDto = new ArrayList<>();
+        for(MissionComplete missionComplete : entity){
+            responseDto.add(new MissionCompleteResponseDto(missionComplete));
         }
         return responseDto;
     }

@@ -3,7 +3,6 @@ package kr.org.dagather.domain.mission_complete.controller;
 import kr.org.dagather.common.response.ApiResponse;
 import kr.org.dagather.common.response.SuccessCode;
 import kr.org.dagather.domain.mission_complete.dto.*;
-import kr.org.dagather.domain.mission_complete.entity.MissionComplete;
 import kr.org.dagather.domain.mission_complete.repository.MissionCompleteRepository;
 import kr.org.dagather.domain.mission_complete.service.MissionCompleteService;
 import lombok.RequiredArgsConstructor;
@@ -33,4 +32,8 @@ public class MissionCompleteController {
         return ApiResponse.success(SuccessCode.MISSION_COMPLETE_SUCCESS, missionCompleteService.update(requestDto));
     }
 
+    @RequestMapping(value = "/ongoing", method = RequestMethod.GET)
+    public ApiResponse<List<MissionCompleteResponseDto>> getOngoingMissions(@RequestParam("memberId") Integer memberId) {
+        return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findOngoingMissions(memberId));
+    }
 }
