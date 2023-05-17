@@ -1,12 +1,19 @@
 package kr.org.dagather.domain.friend.service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.org.dagather.common.exception.CustomException;
+import kr.org.dagather.common.exception.DuplicateException;
 import kr.org.dagather.common.exception.NotFoundException;
 import kr.org.dagather.common.exception.NumberFormatException;
 import kr.org.dagather.common.response.ErrorCode;
+import kr.org.dagather.domain.friend.dto.FriendChatroomMapper;
+import kr.org.dagather.domain.friend.dto.FriendChatroomRequestDto;
+import kr.org.dagather.domain.friend.dto.FriendChatroomResponseDto;
 import kr.org.dagather.domain.friend.dto.FriendMapper;
 import kr.org.dagather.domain.friend.dto.FriendRequestDto;
 import kr.org.dagather.domain.friend.dto.FriendResponseDto;
@@ -20,6 +27,7 @@ public class FriendService {
 
 	private final FriendRepository friendRepository;
 	private final FriendMapper friendMapper;
+	private final FriendChatroomMapper friendChatroomMapper;
 
 	@Transactional
 	public FriendResponseDto requestFriend(FriendRequestDto requestDto) {
@@ -50,6 +58,18 @@ public class FriendService {
 	}
 
 	@Transactional
+	public FriendChatroomResponseDto setChatroom(FriendChatroomRequestDto requestDto) {
+		Friend friend = friendRepository.findFriendById(requestDto.getFriendId());
+		if (friend == null) throw new NotFoundException(ErrorCode.FRIEND_NOT_FOUND);
+		if (friendRepository.existsByChatroomId(requestDto.getChatroomId()))
+			throw new DuplicateException(ErrorCode.DUPLICATED_CHATROOM);
+
+		friend.setChatroomId(requestDto.getChatroomId());
+
+		return friendChatroomMapper.toResponseDto(friend);
+	}
+
+	@Transactional
 	public Long rejectFriend(String friendId) {
 		try {
 			Long id = Long.parseLong(friendId);
@@ -61,5 +81,30 @@ public class FriendService {
 		} catch (NumberFormatException e) {
 			throw new NumberFormatException(ErrorCode.BAD_PARAMETER_TYPE);
 		}
+	}
+
+	@Transactional
+	public List<FriendResponseDto> getRequestList(String memberId, String requestBy) {
+		List<Friend> friends;
+		if ("1".equals(requestBy)) {
+			friends = friendRepository.findFriendsBySenderAndAreWeFriendFalse(memberId);
+		} else if ("0".equals(requestBy)) {
+			friends = friendRepository.findFriendsByReceiverAndAreWeFriendFalse(memberId);
+		} else {
+			throw new CustomException(ErrorCode.BAD_PARAMETER);
+		}
+		List<FriendResponseDto> result = friends.stream()
+			.map(friendMapper::toResponseDto).collect(Collectors.toList());
+
+		return result;
+	}
+
+	@Transactional
+	public List<FriendChatroomResponseDto> getFriendList(String memberId) {
+		List<Friend> friends = friendRepository.findFriendsByMemberId(memberId);
+		List<FriendChatroomResponseDto> result = friends.stream()
+			.map(friendChatroomMapper::toResponseDto).collect(Collectors.toList());
+
+		return result;
 	}
 }
