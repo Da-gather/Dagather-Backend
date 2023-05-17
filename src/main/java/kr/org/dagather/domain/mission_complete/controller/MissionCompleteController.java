@@ -31,4 +31,9 @@ public class MissionCompleteController {
     public ApiResponse<MissionCompleteUpdateResponseDto> update(@RequestBody MissionCompleteUpdateRequestDto requestDto) {
         return ApiResponse.success(SuccessCode.MISSION_COMPLETE_SUCCESS, missionCompleteService.update(requestDto));
     }
+
+    @RequestMapping(value = "/ongoing", method = RequestMethod.GET)
+    public ApiResponse<List<MissionCompleteResponseDto>> getOngoingMissions(@RequestParam("memberId") Integer memberId) {
+        return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findOngoingMissions(memberId));
+    }
 }

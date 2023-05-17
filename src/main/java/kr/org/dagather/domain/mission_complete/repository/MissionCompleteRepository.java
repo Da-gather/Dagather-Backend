@@ -19,4 +19,7 @@ public interface MissionCompleteRepository extends JpaRepository<MissionComplete
 
     @Query(value = "delete from mission_complete where member_id1 = :memberId1 and member_id2 = :memberId2 and (isnull(complete1) or isnull(complete2))", nativeQuery = true)
     void deleteByMemberIds(@Param("memberId1") Integer memberId1, @Param("memberId2") Integer memberId2);
+
+    @Query(value = "select * from mission_complete where (member_id1=:memberId or member_id2=:memberId) and (ISNULL(complete1) or ISNULL(complete2))", nativeQuery = true)
+    List<MissionComplete> findOngoingMissions(@Param("memberId") Integer memberId);
 }
