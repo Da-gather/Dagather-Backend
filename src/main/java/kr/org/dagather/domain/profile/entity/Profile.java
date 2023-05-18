@@ -54,14 +54,14 @@ public class Profile {
 	private String nationality;
 
 	@Column(nullable = false)
-	private int rperiod;
+	private String rperiod;
 
 	@Column(nullable = false)
 	private String introduction;
 
 	@Builder
 	Profile(String memberId, String resident, String name, String imageUrl, boolean gender, LocalDate birth,
-		String nationality, int rperiod, String introduction) {
+		String nationality, String rperiod, String introduction) {
 		Assert.notNull(memberId, "memberId must not be null");
 		Assert.notNull(resident, "resident must not be null");
 		Assert.notNull(name, "name must not be null");

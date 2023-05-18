@@ -18,7 +18,7 @@ public class ProfileResponseDto {
 	private boolean gender;
 	private String birth;
 	private String nationality;
-	private int rperiod;
+	private String rperiod;
 	private String introduction;
 	private List<String> purposes;
 	private List<String> interests;

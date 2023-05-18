@@ -40,8 +40,8 @@ public class ProfileRequestDto {
 	@NotBlank(message = "국적이 없습니다.")
 	private String nationality;
 
-	@NotNull(message = "거주기간이 없습니다.")
-	private int rperiod;
+	@NotBlank(message = "거주기간이 없습니다.")
+	private String rperiod;
 
 	@NotBlank(message = "자기소개가 없습니다.")
 	private String introduction;
