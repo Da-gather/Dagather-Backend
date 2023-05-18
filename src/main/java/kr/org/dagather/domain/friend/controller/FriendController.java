@@ -19,6 +19,7 @@ import kr.org.dagather.domain.friend.dto.FriendChatroomMapper;
 import kr.org.dagather.domain.friend.dto.FriendChatroomRequestDto;
 import kr.org.dagather.domain.friend.dto.FriendChatroomResponseDto;
 import kr.org.dagather.domain.friend.dto.FriendRequestDto;
+import kr.org.dagather.domain.friend.dto.FriendRequestResponseDto;
 import kr.org.dagather.domain.friend.dto.FriendResponseDto;
 import kr.org.dagather.domain.friend.service.FriendService;
 import lombok.RequiredArgsConstructor;
@@ -57,8 +58,8 @@ public class FriendController {
 	}
 
 	@GetMapping("/list/{requestBy}")
-	public ApiResponse<List<FriendResponseDto>> getRequestList(@PathVariable String requestBy) {
-		List<FriendResponseDto> responseDtoList = friendService.getRequestList(requestBy);
+	public ApiResponse<List<FriendRequestResponseDto>> getRequestList(@PathVariable String requestBy) {
+		List<FriendRequestResponseDto> responseDtoList = friendService.getRequestList(requestBy);
 		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDtoList);
 	}
 
