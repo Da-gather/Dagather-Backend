@@ -21,4 +21,16 @@ public class FriendMapper {
 
 		return builder.build();
 	}
+
+	public FriendRequestResponseDto toResponseDto(String memberId, String name, String imageUrl) {
+		if (memberId == null || name == null || imageUrl == null)
+			throw new NullPointerException();
+
+		FriendRequestResponseDto.FriendRequestResponseDtoBuilder builder = FriendRequestResponseDto.builder();
+		builder.memberId(memberId);
+		builder.name(name);
+		builder.imageUrl(imageUrl);
+
+		return builder.build();
+	}
 }

@@ -17,9 +17,12 @@ import kr.org.dagather.domain.friend.dto.FriendChatroomRequestDto;
 import kr.org.dagather.domain.friend.dto.FriendChatroomResponseDto;
 import kr.org.dagather.domain.friend.dto.FriendMapper;
 import kr.org.dagather.domain.friend.dto.FriendRequestDto;
+import kr.org.dagather.domain.friend.dto.FriendRequestResponseDto;
 import kr.org.dagather.domain.friend.dto.FriendResponseDto;
 import kr.org.dagather.domain.friend.entity.Friend;
 import kr.org.dagather.domain.friend.repository.FriendRepository;
+import kr.org.dagather.domain.profile.entity.Profile;
+import kr.org.dagather.domain.profile.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -27,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class FriendService {
 
 	private final FriendRepository friendRepository;
+	private final ProfileRepository profileRepository;
 	private final FriendMapper friendMapper;
 	private final FriendChatroomMapper friendChatroomMapper;
 
@@ -85,20 +89,25 @@ public class FriendService {
 	}
 
 	@Transactional
-	public List<FriendResponseDto> getRequestList(String requestBy) {
+	public List<FriendRequestResponseDto> getRequestList(String requestBy) {
 		String memberId = AuthFilter.getCurrentMemberId();
 		if (memberId == null || memberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
-		List<Friend> friends;
+		List<String> friends;
 		if ("1".equals(requestBy)) {
-			friends = friendRepository.findFriendsBySenderAndAreWeFriendFalse(memberId);
+			friends = friendRepository.findFriendsBySenderAndAreWeFriendFalse(memberId).stream()
+				.map(friend -> { return friend.getReceiver(); }).collect(Collectors.toList());
 		} else if ("0".equals(requestBy)) {
-			friends = friendRepository.findFriendsByReceiverAndAreWeFriendFalse(memberId);
+			friends = friendRepository.findFriendsByReceiverAndAreWeFriendFalse(memberId).stream()
+				.map(friend -> { return friend.getSender(); }).collect(Collectors.toList());
 		} else {
 			throw new CustomException(ErrorCode.BAD_PARAMETER);
 		}
-		List<FriendResponseDto> result = friends.stream()
-			.map(friendMapper::toResponseDto).collect(Collectors.toList());
+
+		List<FriendRequestResponseDto> result = friends.stream().map(friend -> {
+			Profile profile = profileRepository.findByMemberId(friend);
+			return friendMapper.toResponseDto(friend, profile.getName(), profile.getImageUrl());
+		}).collect(Collectors.toList());
 
 		return result;
 	}

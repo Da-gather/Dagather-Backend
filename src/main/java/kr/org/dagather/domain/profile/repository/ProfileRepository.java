@@ -9,4 +9,5 @@ import kr.org.dagather.domain.profile.entity.Profile;
 public interface ProfileRepository extends JpaRepository<Profile, Long> {
 
 	Optional<Profile> findProfileByMemberId(String memberId);
+	Profile findByMemberId(String memberId);
 }
