@@ -117,7 +117,7 @@ public class ProfileService {
 		profileInterests.forEach(i -> { interests.add(new ProfileInterestDto(i.getInterest(), myInterests.contains(i.getInterest()))); });
 
 		// add are we friend
-		boolean areWeFriend = friendRepository.areWeFriend(currentMemberId, memberId);
+		boolean areWeFriend = friendRepository.areWeFriend(currentMemberId, memberId).orElse(false);
 
 		return profileMapper.toGetResponseDto(profile, purposes, interests, areWeFriend);
 	}
