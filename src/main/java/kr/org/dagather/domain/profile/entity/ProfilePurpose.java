@@ -34,7 +34,7 @@ public class ProfilePurpose {
 	@JoinColumn(name = "profile_id")
 	private Profile profile;
 
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "VARCHAR(255) CHARACTER SET UTF8")
 	private String purpose;
 
 	@Builder
