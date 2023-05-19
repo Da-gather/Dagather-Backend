@@ -15,11 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.org.dagather.common.response.ApiResponse;
 import kr.org.dagather.common.response.SuccessCode;
-import kr.org.dagather.domain.friend.dto.FriendChatroomMapper;
 import kr.org.dagather.domain.friend.dto.FriendChatroomRequestDto;
-import kr.org.dagather.domain.friend.dto.FriendChatroomResponseDto;
 import kr.org.dagather.domain.friend.dto.FriendRequestDto;
-import kr.org.dagather.domain.friend.dto.FriendRequestResponseDto;
+import kr.org.dagather.domain.friend.dto.FriendListResponseDto;
 import kr.org.dagather.domain.friend.dto.FriendResponseDto;
 import kr.org.dagather.domain.friend.service.FriendService;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +44,8 @@ public class FriendController {
 	}
 
 	@PatchMapping("/chatroom")
-	public ApiResponse<FriendChatroomResponseDto> setChatroom(@Valid @RequestBody FriendChatroomRequestDto requestDto) {
-		FriendChatroomResponseDto responseDto = friendService.setChatroom(requestDto);
+	public ApiResponse<FriendResponseDto> setChatroom(@Valid @RequestBody FriendChatroomRequestDto requestDto) {
+		FriendResponseDto responseDto = friendService.setChatroom(requestDto);
 		return ApiResponse.success(SuccessCode.SET_CHATROOM_SUCCESS, responseDto);
 	}
 
@@ -58,14 +56,14 @@ public class FriendController {
 	}
 
 	@GetMapping("/list/{requestBy}")
-	public ApiResponse<List<FriendRequestResponseDto>> getRequestList(@PathVariable String requestBy) {
-		List<FriendRequestResponseDto> responseDtoList = friendService.getRequestList(requestBy);
+	public ApiResponse<List<FriendListResponseDto>> getRequestList(@PathVariable String requestBy) {
+		List<FriendListResponseDto> responseDtoList = friendService.getRequestList(requestBy);
 		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDtoList);
 	}
 
 	@GetMapping("/list")
-	public ApiResponse<List<FriendChatroomResponseDto>> getFriendList() {
-		List<FriendChatroomResponseDto> responseDtoList = friendService.getFriendList();
+	public ApiResponse<List<FriendListResponseDto>> getFriendList() {
+		List<FriendListResponseDto> responseDtoList = friendService.getFriendList();
 		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDtoList);
 	}
 }

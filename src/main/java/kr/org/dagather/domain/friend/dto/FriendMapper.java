@@ -3,6 +3,7 @@ package kr.org.dagather.domain.friend.dto;
 import org.springframework.stereotype.Component;
 
 import kr.org.dagather.domain.friend.entity.Friend;
+import kr.org.dagather.domain.profile.entity.Profile;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -18,18 +19,22 @@ public class FriendMapper {
 		builder.sender(friend.getSender());
 		builder.receiver(friend.getReceiver());
 		builder.areWeFriend(friend.isAreWeFriend());
+		builder.chatroomId(friend.getChatroomId());
 
 		return builder.build();
 	}
 
-	public FriendRequestResponseDto toResponseDto(String memberId, String name, String imageUrl) {
-		if (memberId == null || name == null || imageUrl == null)
+	public FriendListResponseDto toResponseDto(Friend friend, Profile profile) {
+		if (friend == null)
 			throw new NullPointerException();
 
-		FriendRequestResponseDto.FriendRequestResponseDtoBuilder builder = FriendRequestResponseDto.builder();
-		builder.memberId(memberId);
-		builder.name(name);
-		builder.imageUrl(imageUrl);
+		FriendListResponseDto.FriendListResponseDtoBuilder builder = FriendListResponseDto.builder();
+		builder.friendId(friend.getId());
+		builder.memberId(profile.getMemberId());
+		builder.name(profile.getName());
+		builder.imageUrl(profile.getImageUrl());
+		builder.areWeFriend(friend.isAreWeFriend());
+		builder.chatroomId(friend.getChatroomId());
 
 		return builder.build();
 	}

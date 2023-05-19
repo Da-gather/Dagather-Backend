@@ -16,4 +16,5 @@ public class FriendResponseDto {
 	private String sender;
 	private String receiver;
 	private boolean areWeFriend;
+	private String chatroomId;
 }

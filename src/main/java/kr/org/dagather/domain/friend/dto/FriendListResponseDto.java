@@ -11,8 +11,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class FriendRequestResponseDto {
+public class FriendListResponseDto {
+	private Long friendId;
 	private String memberId;
 	private String name;
 	private String imageUrl;
+	private boolean areWeFriend;
+	private String chatroomId;
 }
