@@ -12,12 +12,10 @@ import kr.org.dagather.common.exception.NotFoundException;
 import kr.org.dagather.common.exception.NumberFormatException;
 import kr.org.dagather.common.filter.AuthFilter;
 import kr.org.dagather.common.response.ErrorCode;
-import kr.org.dagather.domain.friend.dto.FriendChatroomMapper;
 import kr.org.dagather.domain.friend.dto.FriendChatroomRequestDto;
-import kr.org.dagather.domain.friend.dto.FriendChatroomResponseDto;
 import kr.org.dagather.domain.friend.dto.FriendMapper;
 import kr.org.dagather.domain.friend.dto.FriendRequestDto;
-import kr.org.dagather.domain.friend.dto.FriendRequestResponseDto;
+import kr.org.dagather.domain.friend.dto.FriendListResponseDto;
 import kr.org.dagather.domain.friend.dto.FriendResponseDto;
 import kr.org.dagather.domain.friend.entity.Friend;
 import kr.org.dagather.domain.friend.repository.FriendRepository;
@@ -32,7 +30,6 @@ public class FriendService {
 	private final FriendRepository friendRepository;
 	private final ProfileRepository profileRepository;
 	private final FriendMapper friendMapper;
-	private final FriendChatroomMapper friendChatroomMapper;
 
 	@Transactional
 	public FriendResponseDto requestFriend(FriendRequestDto requestDto) {
@@ -63,7 +60,7 @@ public class FriendService {
 	}
 
 	@Transactional
-	public FriendChatroomResponseDto setChatroom(FriendChatroomRequestDto requestDto) {
+	public FriendResponseDto setChatroom(FriendChatroomRequestDto requestDto) {
 		Friend friend = friendRepository.findFriendById(requestDto.getFriendId());
 		if (friend == null) throw new NotFoundException(ErrorCode.FRIEND_NOT_FOUND);
 		if (friendRepository.existsByChatroomId(requestDto.getChatroomId()))
@@ -71,7 +68,7 @@ public class FriendService {
 
 		friend.setChatroomId(requestDto.getChatroomId());
 
-		return friendChatroomMapper.toResponseDto(friend);
+		return friendMapper.toResponseDto(friend);
 	}
 
 	@Transactional
@@ -89,24 +86,24 @@ public class FriendService {
 	}
 
 	@Transactional
-	public List<FriendRequestResponseDto> getRequestList(String requestBy) {
+	public List<FriendListResponseDto> getRequestList(String requestBy) {
 		String memberId = AuthFilter.getCurrentMemberId();
 		if (memberId == null || memberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
 		List<Friend> friends;
-		List<FriendRequestResponseDto> result;
+		List<FriendListResponseDto> result;
 		if ("1".equals(requestBy)) {
 			friends = friendRepository.findFriendsBySenderAndAreWeFriendFalse(memberId);
 			result = friends.stream().map(friend -> {
 				Profile profile = profileRepository.findByMemberId(friend.getReceiver());
-				return friendMapper.toResponseDto(friend.getId(), friend.getReceiver(), profile.getName(), profile.getImageUrl());
+				return friendMapper.toResponseDto(friend, profile);
 			}).collect(Collectors.toList());
 
 		} else if ("0".equals(requestBy)) {
 			friends = friendRepository.findFriendsByReceiverAndAreWeFriendFalse(memberId);
 			result = friends.stream().map(friend -> {
 				Profile profile = profileRepository.findByMemberId(friend.getSender());
-				return friendMapper.toResponseDto(friend.getId(), friend.getSender(), profile.getName(), profile.getImageUrl());
+				return friendMapper.toResponseDto(friend, profile);
 			}).collect(Collectors.toList());
 		} else {
 			throw new CustomException(ErrorCode.BAD_PARAMETER);
@@ -116,13 +113,21 @@ public class FriendService {
 	}
 
 	@Transactional
-	public List<FriendChatroomResponseDto> getFriendList() {
+	public List<FriendListResponseDto> getFriendList() {
 		String memberId = AuthFilter.getCurrentMemberId();
 		if (memberId == null || memberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
 		List<Friend> friends = friendRepository.findFriendsByMemberId(memberId);
-		List<FriendChatroomResponseDto> result = friends.stream()
-			.map(friendChatroomMapper::toResponseDto).collect(Collectors.toList());
+		List<FriendListResponseDto> result = friends.stream()
+			.map(friend -> {
+				Profile profile;
+				if (friend.getSender().equals(memberId)) {
+					profile = profileRepository.findByMemberId(friend.getReceiver());
+				} else {
+					profile = profileRepository.findByMemberId(friend.getSender());
+				}
+				return friendMapper.toResponseDto(friend, profile);
+			}).collect(Collectors.toList());
 
 		return result;
 	}
