@@ -33,11 +33,12 @@ public class FriendService {
 
 	@Transactional
 	public FriendResponseDto requestFriend(FriendRequestDto requestDto) {
-		if (friendRepository.existsBySenderAndReceiver(requestDto.getSender(), requestDto.getReceiver())) {
+		String memberId = AuthFilter.getCurrentMemberId();
+		if (friendRepository.existsBySenderAndReceiver(memberId, requestDto.getReceiver())) {
 			throw new CustomException(ErrorCode.DUPLICATED_FRIEND);
 		}
 		Friend friend = friendRepository.save(Friend.builder()
-			.sender(requestDto.getSender())
+			.sender(memberId)
 			.receiver(requestDto.getReceiver())
 			.build());
 
@@ -118,7 +119,7 @@ public class FriendService {
 		if (memberId == null || memberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
 		List<Friend> friends = friendRepository.findFriendsByMemberId(memberId);
-		List<FriendListResponseDto> result = friends.stream()
+		return friends.stream()
 			.map(friend -> {
 				Profile profile;
 				if (friend.getSender().equals(memberId)) {
@@ -128,7 +129,5 @@ public class FriendService {
 				}
 				return friendMapper.toResponseDto(friend, profile);
 			}).collect(Collectors.toList());
-
-		return result;
 	}
 }

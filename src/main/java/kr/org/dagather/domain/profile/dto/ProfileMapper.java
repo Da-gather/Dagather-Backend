@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import kr.org.dagather.domain.friend.dto.FriendMapper;
+import kr.org.dagather.domain.friend.entity.Friend;
 import kr.org.dagather.domain.profile.entity.Profile;
 import kr.org.dagather.domain.profile.entity.ProfileInterest;
 import kr.org.dagather.domain.profile.entity.ProfilePurpose;
@@ -41,7 +43,7 @@ public class ProfileMapper {
 		return builder.build();
 	}
 
-	public ProfileGetResponseDto toGetResponseDto(Profile profile, List<ProfilePurposeDto> profilePurposes, List<ProfileInterestDto> profileInterests, boolean areWeFriend) {
+	public ProfileGetResponseDto toGetResponseDto(Profile profile, List<ProfilePurposeDto> profilePurposes, List<ProfileInterestDto> profileInterests, Friend friend) {
 		if (profile == null || profilePurposes == null || profileInterests == null)
 			throw new NullPointerException();
 
@@ -58,7 +60,7 @@ public class ProfileMapper {
 		builder.introduction(profile.getIntroduction());
 		builder.purposes(profilePurposes);
 		builder.interests(profileInterests);
-		builder.areWeFriend(areWeFriend);
+		builder.areWeFriend(FriendMapper.areWeFriend(friend));
 
 		return builder.build();
 	}

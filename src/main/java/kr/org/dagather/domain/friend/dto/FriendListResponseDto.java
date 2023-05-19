@@ -16,6 +16,6 @@ public class FriendListResponseDto {
 	private String memberId;
 	private String name;
 	private String imageUrl;
-	private boolean areWeFriend;
+	private String areWeFriend;
 	private String chatroomId;
 }
