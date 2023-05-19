@@ -29,6 +29,7 @@ public class AuthFilter extends OncePerRequestFilter {
 		FilterChain filterChain) throws IOException, ServletException {
 
 		currentMemberId = request.getHeader("Authorization");
+		System.out.println("currentMemberId: " + currentMemberId);
 		filterChain.doFilter(request, response);
 	}
 }
