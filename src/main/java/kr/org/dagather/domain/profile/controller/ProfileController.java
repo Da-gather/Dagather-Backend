@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,14 +38,14 @@ public class ProfileController {
 	}
 
 	@GetMapping("/{memberId}")
-	public ApiResponse<ProfileGetResponseDto> getProfile(@PathVariable String memberId){
-		ProfileGetResponseDto responseDto = profileService.getProfile(memberId);
+	public ApiResponse<ProfileGetResponseDto> getProfile(@RequestHeader("Authorization") String currentId, @PathVariable String memberId){
+		ProfileGetResponseDto responseDto = profileService.getProfile(currentId, memberId);
 		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDto);
 	}
 
 	@GetMapping("/list")
-	public ApiResponse<List<ProfileGetListResponseDto>> getProfileList(@RequestParam String filter) {
-		List<ProfileGetListResponseDto> responseDtoList = profileService.getProfileList(filter);
+	public ApiResponse<List<ProfileGetListResponseDto>> getProfileList(@RequestHeader("Authorization") String currentId, @RequestParam String filter) {
+		List<ProfileGetListResponseDto> responseDtoList = profileService.getProfileList(currentId, filter);
 		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDtoList);
 	}
 
