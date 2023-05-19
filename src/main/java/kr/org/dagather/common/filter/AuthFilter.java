@@ -11,23 +11,27 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import kr.org.dagather.common.util.AuthUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Order(0)
 @Component
 public class AuthFilter extends OncePerRequestFilter {
 
-	@Getter
-	public static String currentMemberId;
+	// @Getter
+	// public static String currentMemberId;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws IOException, ServletException {
 
 		System.out.println("request: " + request);
-		currentMemberId = request.getHeader("Authorization");
+		String currentMemberId = request.getHeader("Authorization");
+		AuthUtil.setMemberId(currentMemberId);
 		System.out.println("currentMemberId: " + currentMemberId);
+		System.out.println("AuthUtil MemberId: " + AuthUtil.getMemberId());
 		filterChain.doFilter(request, response);
 	}
 }
