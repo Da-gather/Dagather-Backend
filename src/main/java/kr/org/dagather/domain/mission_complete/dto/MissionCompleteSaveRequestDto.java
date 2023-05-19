@@ -12,13 +12,13 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MissionCompleteSaveRequestDto {
     private Mission missionId;
-    private Integer memberId1;
-    private Integer memberId2;
+    private String memberId1;
+    private String memberId2;
     private Boolean complete1;
     private Boolean complete2;
 
     @Builder
-    public MissionCompleteSaveRequestDto(Mission missionId, Integer memberId1, Integer memberId2, Boolean complete1, Boolean complete2) {
+    public MissionCompleteSaveRequestDto(Mission missionId, String memberId1, String memberId2, Boolean complete1, Boolean complete2) {
         this.missionId = missionId;
         this.memberId1 = memberId1;
         this.memberId2 = memberId2;

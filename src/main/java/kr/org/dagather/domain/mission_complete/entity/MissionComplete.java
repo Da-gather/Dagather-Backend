@@ -23,10 +23,10 @@ public class MissionComplete extends BaseTimeEntity {
     private Mission missionId;
 
     @Column(nullable = false, updatable = false)
-    private Integer memberId1;
+    private String memberId1;
 
     @Column(nullable = false, updatable = false)
-    private Integer memberId2;
+    private String memberId2;
 
     @Column(columnDefinition = "boolean default false")
     private Boolean complete1;
@@ -35,7 +35,7 @@ public class MissionComplete extends BaseTimeEntity {
     private Boolean complete2;
 
     @Builder
-    public MissionComplete(Mission missionId, Integer memberId1, Integer memberId2, Boolean complete1, Boolean complete2) {
+    public MissionComplete(Mission missionId, String memberId1, String memberId2, Boolean complete1, Boolean complete2) {
         this.missionId = missionId;
         this.memberId1 = memberId1;
         this.memberId2 = memberId2;

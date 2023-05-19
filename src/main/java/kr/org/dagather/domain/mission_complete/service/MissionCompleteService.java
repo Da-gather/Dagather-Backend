@@ -47,7 +47,7 @@ public class MissionCompleteService {
         return new MissionCompleteSaveResponseDto(requestDto);
     }
     
-    public List<MissionCompleteResponseDto> findByMemberIds(Integer memberId1, Integer memberId2) {
+    public List<MissionCompleteResponseDto> findByMemberIds(String memberId1, String memberId2) {
 
         // TODO : 완료한 미션이 없는 경우 처리
         List<MissionComplete> entity = missionCompleteRepository.findByMemberIds(memberId1, memberId2);
@@ -58,7 +58,7 @@ public class MissionCompleteService {
         return responseDto;
     }
 
-    public List<MissionCompleteResponseDto> findOngoingMissions(Integer memberId) {
+    public List<MissionCompleteResponseDto> findOngoingMissions(String memberId) {
         List<MissionComplete> entity = missionCompleteRepository.findOngoingMissions(memberId);
         List<MissionCompleteResponseDto> responseDto = new ArrayList<>();
         for(MissionComplete missionComplete : entity){
@@ -67,13 +67,13 @@ public class MissionCompleteService {
         return responseDto;
     }
 
-    public MissionCompleteCountResponseDto getMissionStatistics(Integer memberId) {
+    public MissionCompleteCountResponseDto getMissionStatistics(String memberId) {
         List<List<Integer>> entity = missionCompleteRepository.getMissionCount(memberId);
         MissionCompleteCountResponseDto responseDto = new MissionCompleteCountResponseDto(entity);
         return responseDto;
     }
 
-    public List<MissionCompleteResponseDto> findRecent10CompleteMissions(Integer memberId) {
+    public List<MissionCompleteResponseDto> findRecent10CompleteMissions(String memberId) {
         List<MissionComplete> entity = missionCompleteRepository.findRecent10CompleteMissions(memberId);
         List<MissionCompleteResponseDto> responseDto = new ArrayList<>();
         for(MissionComplete missionComplete : entity){
