@@ -93,21 +93,24 @@ public class FriendService {
 		String memberId = AuthFilter.getCurrentMemberId();
 		if (memberId == null || memberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
-		List<String> friends;
+		List<Friend> friends;
+		List<FriendRequestResponseDto> result;
 		if ("1".equals(requestBy)) {
-			friends = friendRepository.findFriendsBySenderAndAreWeFriendFalse(memberId).stream()
-				.map(friend -> { return friend.getReceiver(); }).collect(Collectors.toList());
+			friends = friendRepository.findFriendsBySenderAndAreWeFriendFalse(memberId);
+			result = friends.stream().map(friend -> {
+				Profile profile = profileRepository.findByMemberId(friend.getReceiver());
+				return friendMapper.toResponseDto(friend.getId(), friend.getReceiver(), profile.getName(), profile.getImageUrl());
+			}).collect(Collectors.toList());
+
 		} else if ("0".equals(requestBy)) {
-			friends = friendRepository.findFriendsByReceiverAndAreWeFriendFalse(memberId).stream()
-				.map(friend -> { return friend.getSender(); }).collect(Collectors.toList());
+			friends = friendRepository.findFriendsByReceiverAndAreWeFriendFalse(memberId);
+			result = friends.stream().map(friend -> {
+				Profile profile = profileRepository.findByMemberId(friend.getSender());
+				return friendMapper.toResponseDto(friend.getId(), friend.getSender(), profile.getName(), profile.getImageUrl());
+			}).collect(Collectors.toList());
 		} else {
 			throw new CustomException(ErrorCode.BAD_PARAMETER);
 		}
-
-		List<FriendRequestResponseDto> result = friends.stream().map(friend -> {
-			Profile profile = profileRepository.findByMemberId(friend);
-			return friendMapper.toResponseDto(friend, profile.getName(), profile.getImageUrl());
-		}).collect(Collectors.toList());
 
 		return result;
 	}

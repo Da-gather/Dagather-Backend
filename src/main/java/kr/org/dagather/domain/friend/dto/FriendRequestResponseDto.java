@@ -12,6 +12,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class FriendRequestResponseDto {
+	private Long friendId;
 	private String memberId;
 	private String name;
 	private String imageUrl;

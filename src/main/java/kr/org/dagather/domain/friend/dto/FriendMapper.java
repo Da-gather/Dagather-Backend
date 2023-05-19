@@ -22,11 +22,12 @@ public class FriendMapper {
 		return builder.build();
 	}
 
-	public FriendRequestResponseDto toResponseDto(String memberId, String name, String imageUrl) {
+	public FriendRequestResponseDto toResponseDto(Long friendId, String memberId, String name, String imageUrl) {
 		if (memberId == null || name == null || imageUrl == null)
 			throw new NullPointerException();
 
 		FriendRequestResponseDto.FriendRequestResponseDtoBuilder builder = FriendRequestResponseDto.builder();
+		builder.friendId(friendId);
 		builder.memberId(memberId);
 		builder.name(name);
 		builder.imageUrl(imageUrl);
