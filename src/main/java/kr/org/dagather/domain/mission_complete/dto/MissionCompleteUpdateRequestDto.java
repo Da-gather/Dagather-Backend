@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class MissionCompleteUpdateRequestDto {
     private Mission missionId;
-    private Integer memberId1;
-    private Integer memberId2;
+    private String memberId1;
+    private String memberId2;
     private Boolean complete1;
     private Boolean complete2;
 

@@ -23,7 +23,7 @@ public class MissionCompleteController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ApiResponse<List<MissionCompleteResponseDto>> getCompletedMissions(@RequestParam("memberId1") Integer memberId1, @RequestParam("memberId2") Integer memberId2) {
+    public ApiResponse<List<MissionCompleteResponseDto>> getCompletedMissions(@RequestParam("memberId1") String memberId1, @RequestParam("memberId2") String memberId2) {
          return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findByMemberIds(memberId1, memberId2));
     }
 
@@ -33,17 +33,17 @@ public class MissionCompleteController {
     }
 
     @RequestMapping(value = "/ongoing", method = RequestMethod.GET)
-    public ApiResponse<List<MissionCompleteResponseDto>> getOngoingMissions(@RequestParam("memberId") Integer memberId) {
+    public ApiResponse<List<MissionCompleteResponseDto>> getOngoingMissions(@RequestParam("memberId") String memberId) {
         return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findOngoingMissions(memberId));
     }
 
     @RequestMapping(value = "/statistics", method = RequestMethod.GET)
-    public ApiResponse<MissionCompleteCountResponseDto> getMissionStatistics(@RequestParam("memberId") Integer memberId) {
+    public ApiResponse<MissionCompleteCountResponseDto> getMissionStatistics(@RequestParam("memberId") String memberId) {
         return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.getMissionStatistics(memberId));
     }
 
     @RequestMapping(value = "/recent10", method = RequestMethod.GET)
-    public ApiResponse<List<MissionCompleteResponseDto>> getRecent10(@RequestParam("memberId") Integer memberId) {
+    public ApiResponse<List<MissionCompleteResponseDto>> getRecent10(@RequestParam("memberId") String memberId) {
         return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findRecent10CompleteMissions(memberId));
     }
 }
