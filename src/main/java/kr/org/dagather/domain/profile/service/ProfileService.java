@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import kr.org.dagather.common.exception.CustomException;
 import kr.org.dagather.common.filter.AuthFilter;
 import kr.org.dagather.common.response.ErrorCode;
+import kr.org.dagather.common.util.AuthUtil;
 import kr.org.dagather.common.util.S3Util;
 import kr.org.dagather.domain.friend.entity.Friend;
 import kr.org.dagather.domain.friend.repository.FriendRepository;
@@ -87,7 +88,8 @@ public class ProfileService {
 	public ProfileGetResponseDto getProfile(String memberId) {
 
 		// get current user info
-		String currentMemberId = AuthFilter.getCurrentMemberId();
+		// String currentMemberId = AuthFilter.getCurrentMemberId();
+		String currentMemberId = AuthUtil.getMemberId();
 		System.out.println("profile service currentMemberId: " + currentMemberId);
 		if (currentMemberId == null || currentMemberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
@@ -124,7 +126,8 @@ public class ProfileService {
 	public List<ProfileGetListResponseDto> getProfileList(String filter) {
 
 		// get current user info
-		String currentMemberId = AuthFilter.getCurrentMemberId();
+		// String currentMemberId = AuthFilter.getCurrentMemberId();
+		String currentMemberId = AuthUtil.getMemberId();
 		if (currentMemberId == null || currentMemberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
 		Profile myProfile = profileRepository.findProfileByMemberId(currentMemberId).orElse(null);
