@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 public class RestExceptionHandler {
 
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ExceptionHandler(CustomException.class)
 	protected ApiResponse<Object> handleCustomException(CustomException exception, HttpServletRequest request) {
 		logInfo(request, exception.getCode().getStatus(), exception.getCode().getMessage());
