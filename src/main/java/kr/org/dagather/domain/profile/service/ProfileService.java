@@ -88,6 +88,7 @@ public class ProfileService {
 
 		// get current user info
 		String currentMemberId = AuthFilter.getCurrentMemberId();
+		System.out.println("profile service currentMemberId: " + currentMemberId);
 		if (currentMemberId == null || currentMemberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
 		Profile myProfile = profileRepository.findProfileByMemberId(currentMemberId).orElse(null);
