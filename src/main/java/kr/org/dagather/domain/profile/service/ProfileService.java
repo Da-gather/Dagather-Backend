@@ -11,6 +11,7 @@ import kr.org.dagather.common.exception.CustomException;
 import kr.org.dagather.common.filter.AuthFilter;
 import kr.org.dagather.common.response.ErrorCode;
 import kr.org.dagather.common.util.S3Util;
+import kr.org.dagather.domain.friend.entity.Friend;
 import kr.org.dagather.domain.friend.repository.FriendRepository;
 import kr.org.dagather.domain.profile.dto.ProfileGetListResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileGetResponseDto;
@@ -113,9 +114,9 @@ public class ProfileService {
 		profileInterests.forEach(i -> { interests.add(new ProfileInterestDto(i.getInterest(), myInterests.contains(i.getInterest()))); });
 
 		// add are we friend
-		boolean areWeFriend = friendRepository.areWeFriend(currentMemberId, memberId).orElse(false);
+		Friend friend = friendRepository.findFriendByMembers(currentMemberId, memberId);
 
-		return profileMapper.toGetResponseDto(profile, purposes, interests, areWeFriend);
+		return profileMapper.toGetResponseDto(profile, purposes, interests, friend);
 	}
 
 	@Transactional

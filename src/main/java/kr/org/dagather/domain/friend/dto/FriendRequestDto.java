@@ -13,9 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class FriendRequestDto {
 
-	@NotBlank(message = "sender가 없습니다.")
-	private String sender;
-
 	@NotBlank(message = "receiver가 없습니다.")
 	private String receiver;
 }

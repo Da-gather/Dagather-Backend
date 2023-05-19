@@ -2,6 +2,7 @@ package kr.org.dagather.domain.friend.dto;
 
 import org.springframework.stereotype.Component;
 
+import kr.org.dagather.common.filter.AuthFilter;
 import kr.org.dagather.domain.friend.entity.Friend;
 import kr.org.dagather.domain.profile.entity.Profile;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ public class FriendMapper {
 		builder.friendId(friend.getId());
 		builder.sender(friend.getSender());
 		builder.receiver(friend.getReceiver());
-		builder.areWeFriend(friend.isAreWeFriend());
+		builder.areWeFriend(areWeFriend(friend));
 		builder.chatroomId(friend.getChatroomId());
 
 		return builder.build();
@@ -33,9 +34,22 @@ public class FriendMapper {
 		builder.memberId(profile.getMemberId());
 		builder.name(profile.getName());
 		builder.imageUrl(profile.getImageUrl());
-		builder.areWeFriend(friend.isAreWeFriend());
+		builder.areWeFriend(areWeFriend(friend));
 		builder.chatroomId(friend.getChatroomId());
 
 		return builder.build();
+	}
+
+	public static String areWeFriend(Friend friend) {
+		String memberId = AuthFilter.getCurrentMemberId();
+
+		if (friend == null) return "NONE";
+		else if (!friend.isAreWeFriend()) {
+			if (friend.getSender().equals(memberId)) return "SEND";
+			else if (friend.getReceiver().equals(memberId)) return "RECEIVE";
+		} else {
+			return "FRIEND";
+		}
+		return "NONE";
 	}
 }
