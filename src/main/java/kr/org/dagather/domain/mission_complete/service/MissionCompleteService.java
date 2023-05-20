@@ -66,7 +66,7 @@ public class MissionCompleteService {
         List<MissionCompleteProfileResponseDto> responseDto = new ArrayList<>();
         String friendId;
         for(MissionComplete missionComplete : entity) {
-            String imageUrl = profileService.getProfile(memberId, memberId).getImageUrl();
+            String imageUrl = profileService.getProfile(memberId).getImageUrl();
             if (Objects.equals(missionComplete.getMemberId1(), memberId)) {
                 friendId = missionComplete.getMemberId2();
 
@@ -89,7 +89,7 @@ public class MissionCompleteService {
         List<MissionCompleteProfileResponseDto> responseDto = new ArrayList<>();
         String friendId;
         for(MissionComplete missionComplete : entity) {
-            String imageUrl = profileService.getProfile(memberId, memberId).getImageUrl();
+            String imageUrl = profileService.getProfile(memberId).getImageUrl();
             if (Objects.equals(missionComplete.getMemberId1(), memberId)) {
                 friendId = missionComplete.getMemberId2();
 
