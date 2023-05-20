@@ -9,5 +9,5 @@ public class AuthUtil {
 
 	@Getter
 	@Setter
-	public static String memberId;
+	public static String loggedInId;
 }

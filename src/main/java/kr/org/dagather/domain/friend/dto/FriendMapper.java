@@ -2,7 +2,6 @@ package kr.org.dagather.domain.friend.dto;
 
 import org.springframework.stereotype.Component;
 
-import kr.org.dagather.common.filter.AuthFilter;
 import kr.org.dagather.common.util.AuthUtil;
 import kr.org.dagather.domain.friend.entity.Friend;
 import kr.org.dagather.domain.profile.entity.Profile;
@@ -42,8 +41,7 @@ public class FriendMapper {
 	}
 
 	public static String areWeFriend(Friend friend) {
-		String memberId = AuthUtil.getMemberId();
-		// String memberId = AuthFilter.getCurrentMemberId();
+		String memberId = AuthUtil.getLoggedInId();
 
 		if (friend == null) return "NONE";
 		else if (!friend.isAreWeFriend()) {
