@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import kr.org.dagather.common.response.ApiResponse;
 import kr.org.dagather.common.response.SuccessCode;
+import kr.org.dagather.common.util.AuthUtil;
 import kr.org.dagather.domain.profile.dto.ProfileGetListResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileGetResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileRequestDto;
@@ -38,14 +39,16 @@ public class ProfileController {
 	}
 
 	@GetMapping("/{memberId}")
-	public ApiResponse<ProfileGetResponseDto> getProfile(@RequestHeader("Authorization") String currentId, @PathVariable String memberId){
-		ProfileGetResponseDto responseDto = profileService.getProfile(currentId, memberId);
+	public ApiResponse<ProfileGetResponseDto> getProfile(@RequestHeader("Authorization") String loggedInId, @PathVariable String memberId){
+		AuthUtil.setLoggedInId(loggedInId);
+		ProfileGetResponseDto responseDto = profileService.getProfile(memberId);
 		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDto);
 	}
 
 	@GetMapping("/list")
-	public ApiResponse<List<ProfileGetListResponseDto>> getProfileList(@RequestHeader("Authorization") String currentId, @RequestParam String filter) {
-		List<ProfileGetListResponseDto> responseDtoList = profileService.getProfileList(currentId, filter);
+	public ApiResponse<List<ProfileGetListResponseDto>> getProfileList(@RequestHeader("Authorization") String loggedInId, @RequestParam String filter) {
+		AuthUtil.setLoggedInId(loggedInId);
+		List<ProfileGetListResponseDto> responseDtoList = profileService.getProfileList(filter);
 		return ApiResponse.success(SuccessCode.GET_SUCCESS, responseDtoList);
 	}
 

@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import kr.org.dagather.common.exception.CustomException;
-import kr.org.dagather.common.filter.AuthFilter;
 import kr.org.dagather.common.response.ErrorCode;
 import kr.org.dagather.common.util.AuthUtil;
 import kr.org.dagather.common.util.S3Util;
@@ -85,11 +84,10 @@ public class ProfileService {
 	}
 
 	@Transactional
-	public ProfileGetResponseDto getProfile(String currentMemberId, String memberId) {
+	public ProfileGetResponseDto getProfile(String memberId) {
 
 		// get current user info
-		// String currentMemberId = AuthFilter.getCurrentMemberId();
-		// String currentMemberId = AuthUtil.getMemberId();
+		String currentMemberId = AuthUtil.getLoggedInId();
 		System.out.println("profile service currentMemberId: " + currentMemberId);
 		if (currentMemberId == null || currentMemberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
@@ -123,11 +121,10 @@ public class ProfileService {
 	}
 
 	@Transactional
-	public List<ProfileGetListResponseDto> getProfileList(String currentMemberId, String filter) {
+	public List<ProfileGetListResponseDto> getProfileList(String filter) {
 
 		// get current user info
-		// String currentMemberId = AuthFilter.getCurrentMemberId();
-		// String currentMemberId = AuthUtil.getMemberId();
+		String currentMemberId = AuthUtil.getLoggedInId();
 		if (currentMemberId == null || currentMemberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
 		Profile myProfile = profileRepository.findProfileByMemberId(currentMemberId).orElse(null);
