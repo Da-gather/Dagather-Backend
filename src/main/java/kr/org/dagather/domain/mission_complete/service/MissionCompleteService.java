@@ -5,7 +5,6 @@ import kr.org.dagather.domain.mission.repository.MissionRepository;
 import kr.org.dagather.domain.mission_complete.dto.*;
 import kr.org.dagather.domain.mission_complete.entity.MissionComplete;
 import kr.org.dagather.domain.mission_complete.repository.MissionCompleteRepository;
-import kr.org.dagather.domain.profile.dto.ProfileGetResponseDto;
 import kr.org.dagather.domain.profile.entity.Profile;
 import kr.org.dagather.domain.profile.repository.ProfileRepository;
 import kr.org.dagather.domain.profile.service.ProfileService;
@@ -14,7 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -54,14 +52,23 @@ public class MissionCompleteService {
         // return response
         return new MissionCompleteSaveResponseDto(requestDto);
     }
+
+    public MissionCompleteResponseDto findOngoingMission(String memberId1, String memberId2) {
+
+        MissionComplete onGoingMission = missionCompleteRepository.findTop1ByMemberId1AndMemberId2OrderByCompletedAtDesc(memberId1, memberId2);
+        Profile userProfile = profileRepository.findByMemberId(memberId1);
+        Profile friendProfile = profileRepository.findByMemberId(memberId2);
+        return new MissionCompleteResponseDto(onGoingMission, userProfile, friendProfile);
+    }
     
-    public List<MissionCompleteResponseDto> findByMemberIds(String memberId1, String memberId2) {
+    public List<MissionCompleteProfileResponseDto> findByMemberIds(String memberId1, String memberId2) {
 
         // TODO : 완료한 미션이 없는 경우 처리
         List<MissionComplete> entity = missionCompleteRepository.findByMemberIds(memberId1, memberId2);
-        List<MissionCompleteResponseDto> responseDto = new ArrayList<>();
+        List<MissionCompleteProfileResponseDto> responseDto = new ArrayList<>();
+        Profile friendProfile = profileRepository.findByMemberId(memberId2);
         for(MissionComplete missionComplete : entity){
-             responseDto.add(new MissionCompleteResponseDto(missionComplete));
+             responseDto.add(new MissionCompleteProfileResponseDto(missionComplete, memberId2, friendProfile, Boolean.TRUE));
         }
         return responseDto;
     }
@@ -110,8 +117,7 @@ public class MissionCompleteService {
     public MissionCompleteUpdateResponseDto update(MissionCompleteUpdateRequestDto requestDto) {
         
         // update entity
-        List<MissionComplete> missionCompletes = missionCompleteRepository.findByMemberId1AndMemberId2OrderByCompletedAtDesc(requestDto.getMemberId1(), requestDto.getMemberId2());
-        MissionComplete onGoingMission = missionCompletes.get(0);
+        MissionComplete onGoingMission = missionCompleteRepository.findTop1ByMemberId1AndMemberId2OrderByCompletedAtDesc(requestDto.getMemberId1(), requestDto.getMemberId2());
         if (requestDto.getComplete1() == null) requestDto.setComplete1(onGoingMission.getComplete1());
         if (requestDto.getComplete2() == null) requestDto.setComplete2(onGoingMission.getComplete2());
         onGoingMission.update(requestDto.getComplete1(), requestDto.getComplete2());
