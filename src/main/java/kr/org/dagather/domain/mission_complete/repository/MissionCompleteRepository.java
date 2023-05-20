@@ -8,10 +8,11 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MissionCompleteRepository extends JpaRepository<MissionComplete, Long> {
-    List<MissionComplete> findByMemberId1AndMemberId2OrderByCompletedAtDesc(String memberId1, String memberId2);
 
     @Query(value = "select * from mission_complete where member_id1 = :memberId1 and member_id2 = :memberId2 and complete1 = true and complete2 = true", nativeQuery = true)
     List<MissionComplete> findByMemberIds(@Param("memberId1") String memberId1, @Param("memberId2") String memberId2);
+
+    MissionComplete findTop1ByMemberId1AndMemberId2OrderByCompletedAtDesc(String memberId1, String memberId2);
 
     @Query(value = "select mission_id from mission_complete where member_id1 = :memberId1 and member_id2 = :memberId2", nativeQuery = true)
     List<Integer> findCompleteMissionIds(@Param("memberId1") String memberId1, @Param("memberId2") String memberId2);

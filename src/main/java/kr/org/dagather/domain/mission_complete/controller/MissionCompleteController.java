@@ -22,8 +22,13 @@ public class MissionCompleteController {
         return ApiResponse.success(SuccessCode.MISSION_CREATE_SUCCESS, missionCompleteService.save(requestDto));
     }
 
+    @RequestMapping(value = "/ongoing", method = RequestMethod.GET)
+    public ApiResponse<MissionCompleteResponseDto> getOngoingMission(@RequestParam("memberId1") String memberId1, @RequestParam("memberId2") String memberId2) {
+        return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findOngoingMission(memberId1, memberId2));
+    }
+
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public ApiResponse<List<MissionCompleteResponseDto>> getCompletedMissions(@RequestParam("memberId1") String memberId1, @RequestParam("memberId2") String memberId2) {
+    public ApiResponse<List<MissionCompleteProfileResponseDto>> getCompletedMissions(@RequestParam("memberId1") String memberId1, @RequestParam("memberId2") String memberId2) {
          return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findByMemberIds(memberId1, memberId2));
     }
 

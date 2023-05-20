@@ -1,7 +1,6 @@
 package kr.org.dagather.domain.mission_complete.dto;
 
 import kr.org.dagather.domain.mission_complete.entity.MissionComplete;
-import kr.org.dagather.domain.profile.dto.ProfileGetResponseDto;
 import kr.org.dagather.domain.profile.entity.Profile;
 import lombok.Builder;
 import lombok.Getter;
