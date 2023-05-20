@@ -10,7 +10,6 @@ import kr.org.dagather.common.exception.CustomException;
 import kr.org.dagather.common.exception.DuplicateException;
 import kr.org.dagather.common.exception.NotFoundException;
 import kr.org.dagather.common.exception.NumberFormatException;
-import kr.org.dagather.common.filter.AuthFilter;
 import kr.org.dagather.common.response.ErrorCode;
 import kr.org.dagather.common.util.AuthUtil;
 import kr.org.dagather.domain.friend.dto.FriendChatroomRequestDto;
@@ -34,8 +33,7 @@ public class FriendService {
 
 	@Transactional
 	public FriendResponseDto requestFriend(FriendRequestDto requestDto) {
-		// String memberId = AuthFilter.getCurrentMemberId();
-		String memberId = AuthUtil.getMemberId();
+		String memberId = AuthUtil.getLoggedInId();
 		if (friendRepository.existsBySenderAndReceiver(memberId, requestDto.getReceiver())) {
 			throw new CustomException(ErrorCode.DUPLICATED_FRIEND);
 		}
@@ -90,8 +88,7 @@ public class FriendService {
 
 	@Transactional
 	public List<FriendListResponseDto> getRequestList(String requestBy) {
-		// String memberId = AuthFilter.getCurrentMemberId();
-		String memberId = AuthUtil.getMemberId();
+		String memberId = AuthUtil.getLoggedInId();
 		if (memberId == null || memberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
 		List<Friend> friends;
@@ -118,8 +115,7 @@ public class FriendService {
 
 	@Transactional
 	public List<FriendListResponseDto> getFriendList() {
-		// String memberId = AuthFilter.getCurrentMemberId();
-		String memberId = AuthUtil.getMemberId();
+		String memberId = AuthUtil.getLoggedInId();
 		if (memberId == null || memberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
 		List<Friend> friends = friendRepository.findFriendsByMemberId(memberId);
