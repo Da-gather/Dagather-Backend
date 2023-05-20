@@ -5,6 +5,7 @@ import kr.org.dagather.domain.mission.repository.MissionRepository;
 import kr.org.dagather.domain.mission_complete.dto.*;
 import kr.org.dagather.domain.mission_complete.entity.MissionComplete;
 import kr.org.dagather.domain.mission_complete.repository.MissionCompleteRepository;
+import kr.org.dagather.domain.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ import java.util.List;
 public class MissionCompleteService {
     private final MissionRepository missionRepository;
     private final MissionCompleteRepository missionCompleteRepository;
+    private final ProfileService profileService;
 
     @Transactional
     public MissionCompleteSaveResponseDto save(MissionCompleteSaveRequestDto requestDto) {
@@ -58,11 +61,19 @@ public class MissionCompleteService {
         return responseDto;
     }
 
-    public List<MissionCompleteResponseDto> findOngoingMissions(String memberId) {
+    public List<MissionCompleteProfileResponseDto> findOngoingMissions(String memberId) {
         List<MissionComplete> entity = missionCompleteRepository.findOngoingMissions(memberId);
-        List<MissionCompleteResponseDto> responseDto = new ArrayList<>();
-        for(MissionComplete missionComplete : entity){
-            responseDto.add(new MissionCompleteResponseDto(missionComplete));
+        List<MissionCompleteProfileResponseDto> responseDto = new ArrayList<>();
+        String friendId;
+        for(MissionComplete missionComplete : entity) {
+            String imageUrl = profileService.getProfile(memberId).getImageUrl();
+            if (Objects.equals(missionComplete.getMemberId1(), memberId)) {
+                friendId = missionComplete.getMemberId2();
+
+            } else {
+                friendId = missionComplete.getMemberId1();
+            }
+            responseDto.add(new MissionCompleteProfileResponseDto(missionComplete, friendId, imageUrl, Boolean.FALSE));
         }
         return responseDto;
     }
@@ -73,11 +84,19 @@ public class MissionCompleteService {
         return responseDto;
     }
 
-    public List<MissionCompleteResponseDto> findRecent10CompleteMissions(String memberId) {
+    public List<MissionCompleteProfileResponseDto> findRecent10CompleteMissions(String memberId) {
         List<MissionComplete> entity = missionCompleteRepository.findRecent10CompleteMissions(memberId);
-        List<MissionCompleteResponseDto> responseDto = new ArrayList<>();
-        for(MissionComplete missionComplete : entity){
-            responseDto.add(new MissionCompleteResponseDto(missionComplete));
+        List<MissionCompleteProfileResponseDto> responseDto = new ArrayList<>();
+        String friendId;
+        for(MissionComplete missionComplete : entity) {
+            String imageUrl = profileService.getProfile(memberId).getImageUrl();
+            if (Objects.equals(missionComplete.getMemberId1(), memberId)) {
+                friendId = missionComplete.getMemberId2();
+
+            } else {
+                friendId = missionComplete.getMemberId1();
+            }
+            responseDto.add(new MissionCompleteProfileResponseDto(missionComplete, friendId, imageUrl, Boolean.TRUE));
         }
         return responseDto;
     }
