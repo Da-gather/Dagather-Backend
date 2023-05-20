@@ -32,7 +32,7 @@ public class MissionCompleteController {
         return ApiResponse.success(SuccessCode.MISSION_COMPLETE_SUCCESS, missionCompleteService.update(requestDto));
     }
 
-    @RequestMapping(value = "/ongoing", method = RequestMethod.GET)
+    @RequestMapping(value = "/ongoings", method = RequestMethod.GET)
     public ApiResponse<List<MissionCompleteProfileResponseDto>> getOngoingMissions(@RequestParam("memberId") String memberId) {
         return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findOngoingMissions(memberId));
     }

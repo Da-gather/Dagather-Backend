@@ -5,12 +5,16 @@ import kr.org.dagather.domain.mission.repository.MissionRepository;
 import kr.org.dagather.domain.mission_complete.dto.*;
 import kr.org.dagather.domain.mission_complete.entity.MissionComplete;
 import kr.org.dagather.domain.mission_complete.repository.MissionCompleteRepository;
+import kr.org.dagather.domain.profile.dto.ProfileGetResponseDto;
+import kr.org.dagather.domain.profile.entity.Profile;
+import kr.org.dagather.domain.profile.repository.ProfileRepository;
 import kr.org.dagather.domain.profile.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -22,6 +26,7 @@ public class MissionCompleteService {
     private final MissionRepository missionRepository;
     private final MissionCompleteRepository missionCompleteRepository;
     private final ProfileService profileService;
+    private final ProfileRepository profileRepository;
 
     @Transactional
     public MissionCompleteSaveResponseDto save(MissionCompleteSaveRequestDto requestDto) {
@@ -66,14 +71,14 @@ public class MissionCompleteService {
         List<MissionCompleteProfileResponseDto> responseDto = new ArrayList<>();
         String friendId;
         for(MissionComplete missionComplete : entity) {
-            String imageUrl = profileService.getProfile(memberId).getImageUrl();
             if (Objects.equals(missionComplete.getMemberId1(), memberId)) {
                 friendId = missionComplete.getMemberId2();
 
             } else {
                 friendId = missionComplete.getMemberId1();
             }
-            responseDto.add(new MissionCompleteProfileResponseDto(missionComplete, friendId, imageUrl, Boolean.FALSE));
+            Profile friendProfile = profileRepository.findByMemberId(friendId);
+            responseDto.add(new MissionCompleteProfileResponseDto(missionComplete, friendId, friendProfile, Boolean.FALSE));
         }
         return responseDto;
     }
@@ -89,14 +94,14 @@ public class MissionCompleteService {
         List<MissionCompleteProfileResponseDto> responseDto = new ArrayList<>();
         String friendId;
         for(MissionComplete missionComplete : entity) {
-            String imageUrl = profileService.getProfile(memberId).getImageUrl();
             if (Objects.equals(missionComplete.getMemberId1(), memberId)) {
                 friendId = missionComplete.getMemberId2();
 
             } else {
                 friendId = missionComplete.getMemberId1();
             }
-            responseDto.add(new MissionCompleteProfileResponseDto(missionComplete, friendId, imageUrl, Boolean.TRUE));
+            Profile friendProfile = profileRepository.findByMemberId(friendId);
+            responseDto.add(new MissionCompleteProfileResponseDto(missionComplete, friendId, friendProfile, Boolean.TRUE));
         }
         return responseDto;
     }
