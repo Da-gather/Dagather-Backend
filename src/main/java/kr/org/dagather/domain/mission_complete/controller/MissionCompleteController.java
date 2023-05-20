@@ -33,7 +33,7 @@ public class MissionCompleteController {
     }
 
     @RequestMapping(value = "/ongoing", method = RequestMethod.GET)
-    public ApiResponse<List<MissionCompleteResponseDto>> getOngoingMissions(@RequestParam("memberId") String memberId) {
+    public ApiResponse<List<MissionCompleteProfileResponseDto>> getOngoingMissions(@RequestParam("memberId") String memberId) {
         return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findOngoingMissions(memberId));
     }
 
@@ -43,7 +43,7 @@ public class MissionCompleteController {
     }
 
     @RequestMapping(value = "/recent10", method = RequestMethod.GET)
-    public ApiResponse<List<MissionCompleteResponseDto>> getRecent10(@RequestParam("memberId") String memberId) {
+    public ApiResponse<List<MissionCompleteProfileResponseDto>> getRecent10(@RequestParam("memberId") String memberId) {
         return ApiResponse.success(SuccessCode.MISSION_READ_SUCCESS, missionCompleteService.findRecent10CompleteMissions(memberId));
     }
 }
