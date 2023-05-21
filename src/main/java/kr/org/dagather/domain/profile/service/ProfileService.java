@@ -47,10 +47,21 @@ public class ProfileService {
 		Profile profile = profileRepository.findProfileByMemberId(requestDto.getMemberId())
 			.orElse(new Profile());
 
+		boolean gender;
+		float longitude, latitude;
+		try {
+			gender = Boolean.parseBoolean(requestDto.getGender());
+			longitude = Float.parseFloat(requestDto.getLongitude());
+			latitude = Float.parseFloat(requestDto.getLatitude());
+		} catch (Exception e) {
+			throw new CustomException(ErrorCode.BAD_PARAMETER_TYPE);
+		}
+
+
 		profile.setMemberId(requestDto.getMemberId());
 		profile.setResident(requestDto.getResident());
 		profile.setName(requestDto.getName());
-		profile.setGender(requestDto.isGender());
+		profile.setGender(gender);
 		profile.setBirth(LocalDate.parse(requestDto.getBirth()));
 		profile.setNationality(requestDto.getNationality());
 		profile.setRperiod(requestDto.getRperiod());
@@ -77,10 +88,11 @@ public class ProfileService {
 		});
 		List<ProfileInterest> profileInterests = profileInterestRepository.findAllByProfile(profile);
 
+		locationRepository.deleteAllByProfile(profile);
 		locationRepository.save(Location.builder()
-			.memberId(requestDto.getMemberId())
-			.longitude(requestDto.getLongitude())
-			.latitude(requestDto.getLatitude())
+			.profile(profile)
+			.longitude(longitude)
+			.latitude(latitude)
 			.build());
 
 		return profileMapper.toResponseDto(profile, profilePurposes, profileInterests);
