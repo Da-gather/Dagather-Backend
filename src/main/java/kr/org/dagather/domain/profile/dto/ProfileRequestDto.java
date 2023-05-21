@@ -32,7 +32,7 @@ public class ProfileRequestDto {
 	private MultipartFile image;
 
 	@NotNull(message = "성별이 없습니다.")
-	private boolean gender;
+	private String gender;
 
 	@NotBlank(message = "생년월일이 없습니다.")
 	private String birth;
@@ -53,9 +53,9 @@ public class ProfileRequestDto {
 	private List<String> interests;
 
 	@NotNull(message = "경도가 없습니다.")
-	private float longitude;
+	private String longitude;
 
 	@NotNull(message = "위도가 없습니다.")
-	private float latitude;
+	private String latitude;
 
 }
