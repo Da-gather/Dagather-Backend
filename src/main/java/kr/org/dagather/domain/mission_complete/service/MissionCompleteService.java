@@ -118,10 +118,13 @@ public class MissionCompleteService {
         
         // update entity
         MissionComplete onGoingMission = missionCompleteRepository.findTop1ByMemberId1AndMemberId2OrderByCompletedAtDesc(requestDto.getMemberId1(), requestDto.getMemberId2());
-        if (Objects.equals(requestDto.getMemberId1(), onGoingMission.getMemberId1())) {
+        Boolean Member1isUser = null;
+        if (Objects.equals(requestDto.getMemberId1(), onGoingMission.getMemberId1())) {  // 완료한 사용자(user) == member1
+            Member1isUser = Boolean.TRUE;
             requestDto.setComplete1(requestDto.getComplete1());
             requestDto.setComplete2(onGoingMission.getComplete2());
-        } else {
+        } else {  // 완료한 사용자(user) == member2
+            Member1isUser = Boolean.FALSE;
             requestDto.setComplete2(requestDto.getComplete1());
             requestDto.setComplete1(onGoingMission.getComplete1());
         }
@@ -129,6 +132,6 @@ public class MissionCompleteService {
 
         // return response
         requestDto.setMissionId(onGoingMission.getMissionId());
-        return new MissionCompleteUpdateResponseDto(requestDto);
+        return new MissionCompleteUpdateResponseDto(requestDto, Member1isUser);
     }
 }

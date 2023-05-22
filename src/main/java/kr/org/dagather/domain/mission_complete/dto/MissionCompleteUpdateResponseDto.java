@@ -3,18 +3,26 @@ package kr.org.dagather.domain.mission_complete.dto;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 public class MissionCompleteUpdateResponseDto {
     private String mission;
     private Integer category;
-    private Boolean complete1;
-    private Boolean complete2;
+    private Boolean userCompleted;
+    private Boolean friendCompleted;
 
     @Builder
-    public MissionCompleteUpdateResponseDto(MissionCompleteUpdateRequestDto requestDto) {
+    public MissionCompleteUpdateResponseDto(MissionCompleteUpdateRequestDto requestDto, Boolean Member1isUser) {
         this.mission = requestDto.getMissionId().getMission();
         this.category = requestDto.getMissionId().getCategory();
-        this.complete1 = requestDto.getComplete1();
-        this.complete2 = requestDto.getComplete2();
+        if (Member1isUser) {
+            this.userCompleted = requestDto.getComplete1();
+            this.friendCompleted = requestDto.getComplete2();
+        } else {
+            this.userCompleted = requestDto.getComplete2();
+            this.friendCompleted = requestDto.getComplete1();
+        }
+
     }
 }
