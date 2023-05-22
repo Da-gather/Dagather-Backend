@@ -118,8 +118,13 @@ public class MissionCompleteService {
         
         // update entity
         MissionComplete onGoingMission = missionCompleteRepository.findTop1ByMemberId1AndMemberId2OrderByCompletedAtDesc(requestDto.getMemberId1(), requestDto.getMemberId2());
-        if (requestDto.getComplete1() == null) requestDto.setComplete1(onGoingMission.getComplete1());
-        if (requestDto.getComplete2() == null) requestDto.setComplete2(onGoingMission.getComplete2());
+        if (Objects.equals(requestDto.getMemberId1(), onGoingMission.getMemberId1())) {
+            requestDto.setComplete1(requestDto.getComplete1());
+            requestDto.setComplete2(onGoingMission.getComplete2());
+        } else {
+            requestDto.setComplete2(requestDto.getComplete1());
+            requestDto.setComplete1(onGoingMission.getComplete1());
+        }
         onGoingMission.update(requestDto.getComplete1(), requestDto.getComplete2());
 
         // return response
