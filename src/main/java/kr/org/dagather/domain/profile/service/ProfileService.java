@@ -48,9 +48,11 @@ public class ProfileService {
 		Profile profile = profileRepository.findProfileByMemberId(requestDto.getMemberId())
 			.orElse(new Profile());
 
+		int rperiod;
 		boolean gender;
 		float longitude, latitude;
 		try {
+			rperiod = Integer.parseInt(requestDto.getRperiod());
 			gender = Boolean.parseBoolean(requestDto.getGender());
 			longitude = Float.parseFloat(requestDto.getLongitude());
 			latitude = Float.parseFloat(requestDto.getLatitude());
@@ -65,7 +67,7 @@ public class ProfileService {
 		profile.setGender(gender);
 		profile.setBirth(LocalDate.parse(requestDto.getBirth()));
 		profile.setNationality(requestDto.getNationality());
-		profile.setRperiod(requestDto.getRperiod());
+		profile.setRperiod(rperiod);
 		profile.setIntroduction(requestDto.getIntroduction());
 
 		String imageUrl = s3Util.profileImageUpload(requestDto.getImage());
