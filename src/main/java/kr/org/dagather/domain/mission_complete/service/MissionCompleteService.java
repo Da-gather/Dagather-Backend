@@ -47,10 +47,10 @@ public class MissionCompleteService {
 
         // save request in entity
         requestDto.setMissionId(mission);
-        missionCompleteRepository.save(requestDto.toEntity());
+        Long id = missionCompleteRepository.save(requestDto.toEntity()).getId();
 
         // return response
-        return new MissionCompleteSaveResponseDto(requestDto);
+        return new MissionCompleteSaveResponseDto(id, requestDto);
     }
 
     public MissionCompleteResponseDto findOngoingMission(String memberId1, String memberId2) {
