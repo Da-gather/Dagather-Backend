@@ -15,6 +15,8 @@ import kr.org.dagather.domain.friend.entity.Friend;
 import kr.org.dagather.domain.friend.repository.FriendRepository;
 import kr.org.dagather.domain.profile.dto.ProfileGetListResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileGetResponseDto;
+import kr.org.dagather.domain.profile.dto.ProfileImagePostRequestDto;
+import kr.org.dagather.domain.profile.dto.ProfileImagePostResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileInterestDto;
 import kr.org.dagather.domain.profile.dto.ProfileMapper;
 import kr.org.dagather.domain.profile.dto.ProfilePurposeDto;
@@ -42,36 +44,28 @@ public class ProfileService {
 	private final ProfileMapper profileMapper;
 	private final S3Util s3Util;
 
+
+	@Transactional
+	public ProfileImagePostResponseDto postProfileImage(ProfileImagePostRequestDto requestDto) {
+		String imageUrl = s3Util.profileImageUpload(requestDto.getImage());
+		return new ProfileImagePostResponseDto(imageUrl);
+	}
+
 	@Transactional
 	public ProfileResponseDto saveProfile(ProfileRequestDto requestDto) {
 
 		Profile profile = profileRepository.findProfileByMemberId(requestDto.getMemberId())
 			.orElse(new Profile());
 
-		int rperiod;
-		boolean gender;
-		float longitude, latitude;
-		try {
-			rperiod = Integer.parseInt(requestDto.getRperiod());
-			gender = Boolean.parseBoolean(requestDto.getGender());
-			longitude = Float.parseFloat(requestDto.getLongitude());
-			latitude = Float.parseFloat(requestDto.getLatitude());
-		} catch (Exception e) {
-			throw new CustomException(ErrorCode.BAD_PARAMETER_TYPE);
-		}
-
-
 		profile.setMemberId(requestDto.getMemberId());
 		profile.setResident(requestDto.getResident());
 		profile.setName(requestDto.getName());
-		profile.setGender(gender);
+		profile.setGender(requestDto.isGender());
 		profile.setBirth(LocalDate.parse(requestDto.getBirth()));
 		profile.setNationality(requestDto.getNationality());
-		profile.setRperiod(rperiod);
+		profile.setRperiod(requestDto.getRperiod());
 		profile.setIntroduction(requestDto.getIntroduction());
-
-		String imageUrl = s3Util.profileImageUpload(requestDto.getImage());
-		profile.setImageUrl(imageUrl);
+		profile.setImageUrl(requestDto.getImageUrl());
 
 		profileRepository.save(profile);
 
@@ -90,8 +84,8 @@ public class ProfileService {
 		locationRepository.deleteAllByProfile(profile);
 		locationRepository.save(Location.builder()
 			.profile(profile)
-			.longitude(longitude)
-			.latitude(latitude)
+			.longitude(requestDto.getLongitude())
+			.latitude(requestDto.getLatitude())
 			.build());
 
 		return profileMapper.toResponseDto(profile, profilePurposes, profileInterests);
