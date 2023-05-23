@@ -20,7 +20,7 @@ public class TestController {
         System.setProperty("python.import.site", "false");
         interpreter = new PythonInterpreter();
         interpreter.execfile("src/main/java/kr/org/dagather/recommend/test.py");
-        interpreter.exec("print(testFunc(5,10))");
+        interpreter.exec("print(testFunction(5,10))");
 
         PyFunction pyFunction = interpreter.get("testFunc", PyFunction.class);
 

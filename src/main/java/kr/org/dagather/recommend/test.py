@@ -1,3 +1,3 @@
-def testFunc(a, b):
+def testFunction(a, b):
     c = a + b
     return c
