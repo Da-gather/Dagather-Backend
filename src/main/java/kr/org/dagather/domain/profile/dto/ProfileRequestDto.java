@@ -29,10 +29,10 @@ public class ProfileRequestDto {
 	private String name;
 
 	@NotNull(message = "이미지가 없습니다.")
-	private MultipartFile image;
+	private String imageUrl;
 
 	@NotNull(message = "성별이 없습니다.")
-	private String gender;
+	private boolean gender;
 
 	@NotBlank(message = "생년월일이 없습니다.")
 	private String birth;
@@ -40,8 +40,8 @@ public class ProfileRequestDto {
 	@NotBlank(message = "국적이 없습니다.")
 	private String nationality;
 
-	@NotBlank(message = "거주기간이 없습니다.")
-	private String rperiod;
+	@NotNull(message = "거주기간이 없습니다.")
+	private int rperiod;
 
 	@NotBlank(message = "자기소개가 없습니다.")
 	private String introduction;
@@ -53,9 +53,9 @@ public class ProfileRequestDto {
 	private List<String> interests;
 
 	@NotNull(message = "경도가 없습니다.")
-	private String longitude;
+	private float longitude;
 
 	@NotNull(message = "위도가 없습니다.")
-	private String latitude;
+	private float latitude;
 
 }
