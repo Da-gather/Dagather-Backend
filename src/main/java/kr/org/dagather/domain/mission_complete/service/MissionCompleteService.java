@@ -58,7 +58,17 @@ public class MissionCompleteService {
         MissionComplete onGoingMission = missionCompleteRepository.findTop1ByMemberId1AndMemberId2OrderByCompletedAtDesc(memberId1, memberId2);
         Profile userProfile = profileRepository.findByMemberId(memberId1);
         Profile friendProfile = profileRepository.findByMemberId(memberId2);
-        return new MissionCompleteResponseDto(onGoingMission, userProfile, friendProfile);
+        // user, friend의 미션 완료 여부 판단
+        Boolean userCompleted;
+        Boolean friendCompleted;
+        if (Objects.equals(memberId1, onGoingMission.getMemberId1())) {  // 사용자(user) == member1
+            userCompleted = onGoingMission.getComplete1();
+            friendCompleted = onGoingMission.getComplete2();
+        } else {  // 완료한 사용자(user) == member2
+            userCompleted = onGoingMission.getComplete2();
+            friendCompleted = onGoingMission.getComplete1();
+        }
+        return new MissionCompleteResponseDto(onGoingMission, userProfile, friendProfile, userCompleted, friendCompleted);
     }
     
     public List<MissionCompleteProfileResponseDto> findByMemberIds(String memberId1, String memberId2) {
