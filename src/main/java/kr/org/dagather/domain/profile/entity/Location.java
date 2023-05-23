@@ -34,13 +34,13 @@ public class Location {
 	private Profile profile;
 
 	@Column(nullable = false)
-	private float longitude;
+	private double longitude;
 
 	@Column(nullable = false)
-	private float latitude;
+	private double latitude;
 
 	@Builder
-	Location(Profile profile, float longitude, float latitude) {
+	Location(Profile profile, double longitude, double latitude) {
 		Assert.notNull(profile, "profile must not be null");
 		Assert.notNull(longitude, "longitude must not be null");
 		Assert.notNull(latitude, "latitude must not be null");

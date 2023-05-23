@@ -53,9 +53,9 @@ public class ProfileRequestDto {
 	private List<String> interests;
 
 	@NotNull(message = "경도가 없습니다.")
-	private float longitude;
+	private double longitude;
 
 	@NotNull(message = "위도가 없습니다.")
-	private float latitude;
+	private double latitude;
 
 }
