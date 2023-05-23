@@ -15,6 +15,8 @@ import kr.org.dagather.domain.friend.entity.Friend;
 import kr.org.dagather.domain.friend.repository.FriendRepository;
 import kr.org.dagather.domain.profile.dto.ProfileGetListResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileGetResponseDto;
+import kr.org.dagather.domain.profile.dto.ProfileImagePostRequestDto;
+import kr.org.dagather.domain.profile.dto.ProfileImagePostResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileInterestDto;
 import kr.org.dagather.domain.profile.dto.ProfileMapper;
 import kr.org.dagather.domain.profile.dto.ProfilePurposeDto;
@@ -41,6 +43,13 @@ public class ProfileService {
 	private final LocationRepository locationRepository;
 	private final ProfileMapper profileMapper;
 	private final S3Util s3Util;
+
+
+	@Transactional
+	public ProfileImagePostResponseDto postProfileImage(ProfileImagePostRequestDto requestDto) {
+		String imageUrl = s3Util.profileImageUpload(requestDto.getImage());
+		return new ProfileImagePostResponseDto(imageUrl);
+	}
 
 	@Transactional
 	public ProfileResponseDto saveProfile(ProfileRequestDto requestDto) {
