@@ -23,6 +23,7 @@ public enum SuccessCode {
 
 	// 프로필
 	PROFILE_SAVE_SUCCESS(OK, "프로필 저장 성공"),
+	PROFILE_IMAGE_UPLOAD_SUCCESS(OK, "프로필 이미지 업로드 성공"),
 
 	// 미션
 	MISSION_SAVE_SUCCESS(OK, "미션 추가 성공"),
