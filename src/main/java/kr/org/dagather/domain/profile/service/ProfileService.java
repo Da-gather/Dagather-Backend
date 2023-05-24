@@ -128,7 +128,6 @@ public class ProfileService {
 		}
 
 		// remove friends from profile list
-		profileRepository.findAllExceptFriend(currentMemberId);
 		friendRepository.findFriendsByMemberId(currentMemberId).forEach(friend -> {
 			if (friend.getSender().equals(currentMemberId)) {
 				profileList.remove(profileRepository.findByMemberId(friend.getReceiver()));
