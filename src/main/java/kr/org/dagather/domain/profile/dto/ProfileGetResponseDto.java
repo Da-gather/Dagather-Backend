@@ -17,7 +17,7 @@ public class ProfileGetResponseDto {
 	private boolean gender;
 	private String birth;
 	private String nationality;
-	private String rperiod;
+	private int rperiod;
 	private String introduction;
 	private List<ProfilePurposeDto> purposes;
 	private List<ProfileInterestDto> interests;

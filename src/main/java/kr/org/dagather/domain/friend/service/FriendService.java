@@ -19,6 +19,7 @@ import kr.org.dagather.domain.friend.dto.FriendListResponseDto;
 import kr.org.dagather.domain.friend.dto.FriendResponseDto;
 import kr.org.dagather.domain.friend.entity.Friend;
 import kr.org.dagather.domain.friend.repository.FriendRepository;
+import kr.org.dagather.domain.mission_complete.repository.MissionCompleteRepository;
 import kr.org.dagather.domain.profile.entity.Profile;
 import kr.org.dagather.domain.profile.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class FriendService {
 
 	private final FriendRepository friendRepository;
 	private final ProfileRepository profileRepository;
+	private final MissionCompleteRepository missionCompleteRepository;
 	private final FriendMapper friendMapper;
 
 	@Transactional
@@ -80,6 +82,8 @@ public class FriendService {
 			if (friend == null) throw new NotFoundException(ErrorCode.FRIEND_NOT_FOUND);
 
 			friendRepository.delete(friend);
+			missionCompleteRepository.deleteByMemberIds(friend.getSender(), friend.getReceiver());
+
 			return friend.getId();
 		} catch (NumberFormatException e) {
 			throw new NumberFormatException(ErrorCode.BAD_PARAMETER_TYPE);

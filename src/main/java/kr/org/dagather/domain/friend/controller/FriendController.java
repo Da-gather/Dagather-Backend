@@ -53,8 +53,7 @@ public class FriendController {
 	}
 
 	@DeleteMapping("/{friendId}")
-	public ApiResponse<Long> rejectFriend(@RequestHeader("Authorization") String loggedInId, @PathVariable String friendId) {
-		AuthUtil.setLoggedInId(loggedInId);
+	public ApiResponse<Long> rejectFriend(@PathVariable String friendId) {
 		Long deletedId = friendService.rejectFriend(friendId);
 		return ApiResponse.success(SuccessCode.REJECT_FRIEND_SUCCESS, deletedId);
 	}

@@ -19,11 +19,11 @@ public class MissionCompleteResponseDto {
 
     private String mission;
     private Integer category;
-    private Boolean complete1;
-    private Boolean complete2;
+    private Boolean userCompleted;
+    private Boolean friendCompleted;
 
     @Builder
-    public MissionCompleteResponseDto(MissionComplete entity, Profile userProfile, Profile friendProfile) {
+    public MissionCompleteResponseDto(MissionComplete entity, Profile userProfile, Profile friendProfile, Boolean userCompleted, Boolean friendCompleted) {
         this.id = entity.getId();
 
         this.userId = userProfile.getMemberId();
@@ -36,7 +36,7 @@ public class MissionCompleteResponseDto {
 
         this.mission = entity.getMissionId().getMission();
         this.category = entity.getMissionId().getCategory();
-        this.complete1 = entity.getComplete1();
-        this.complete2 = entity.getComplete2();
+        this.userCompleted = userCompleted;
+        this.friendCompleted = friendCompleted;
     }
 }

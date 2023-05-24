@@ -47,10 +47,10 @@ public class MissionCompleteService {
 
         // save request in entity
         requestDto.setMissionId(mission);
-        missionCompleteRepository.save(requestDto.toEntity());
+        Long id = missionCompleteRepository.save(requestDto.toEntity()).getId();
 
         // return response
-        return new MissionCompleteSaveResponseDto(requestDto);
+        return new MissionCompleteSaveResponseDto(id, requestDto);
     }
 
     public MissionCompleteResponseDto findOngoingMission(String memberId1, String memberId2) {
@@ -58,7 +58,17 @@ public class MissionCompleteService {
         MissionComplete onGoingMission = missionCompleteRepository.findTop1ByMemberId1AndMemberId2OrderByCompletedAtDesc(memberId1, memberId2);
         Profile userProfile = profileRepository.findByMemberId(memberId1);
         Profile friendProfile = profileRepository.findByMemberId(memberId2);
-        return new MissionCompleteResponseDto(onGoingMission, userProfile, friendProfile);
+        // user, friend의 미션 완료 여부 판단
+        Boolean userCompleted;
+        Boolean friendCompleted;
+        if (Objects.equals(memberId1, onGoingMission.getMemberId1())) {  // 사용자(user) == member1
+            userCompleted = onGoingMission.getComplete1();
+            friendCompleted = onGoingMission.getComplete2();
+        } else {  // 완료한 사용자(user) == member2
+            userCompleted = onGoingMission.getComplete2();
+            friendCompleted = onGoingMission.getComplete1();
+        }
+        return new MissionCompleteResponseDto(onGoingMission, userProfile, friendProfile, userCompleted, friendCompleted);
     }
     
     public List<MissionCompleteProfileResponseDto> findByMemberIds(String memberId1, String memberId2) {
@@ -118,12 +128,20 @@ public class MissionCompleteService {
         
         // update entity
         MissionComplete onGoingMission = missionCompleteRepository.findTop1ByMemberId1AndMemberId2OrderByCompletedAtDesc(requestDto.getMemberId1(), requestDto.getMemberId2());
-        if (requestDto.getComplete1() == null) requestDto.setComplete1(onGoingMission.getComplete1());
-        if (requestDto.getComplete2() == null) requestDto.setComplete2(onGoingMission.getComplete2());
+        Boolean Member1isUser = null;
+        if (Objects.equals(requestDto.getMemberId1(), onGoingMission.getMemberId1())) {  // 완료한 사용자(user) == member1
+            Member1isUser = Boolean.TRUE;
+            requestDto.setComplete1(requestDto.getComplete1());
+            requestDto.setComplete2(onGoingMission.getComplete2());
+        } else {  // 완료한 사용자(user) == member2
+            Member1isUser = Boolean.FALSE;
+            requestDto.setComplete2(requestDto.getComplete1());
+            requestDto.setComplete1(onGoingMission.getComplete1());
+        }
         onGoingMission.update(requestDto.getComplete1(), requestDto.getComplete2());
 
         // return response
         requestDto.setMissionId(onGoingMission.getMissionId());
-        return new MissionCompleteUpdateResponseDto(requestDto);
+        return new MissionCompleteUpdateResponseDto(requestDto, Member1isUser);
     }
 }
