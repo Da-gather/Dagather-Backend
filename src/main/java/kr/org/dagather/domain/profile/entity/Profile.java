@@ -1,8 +1,10 @@
 package kr.org.dagather.domain.profile.entity;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import javax.persistence.Column;
+import javax.persistence.Convert;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -59,9 +61,17 @@ public class Profile {
 	@Column(nullable = false)
 	private String introduction;
 
+	@Column(nullable = false)
+	@Convert(converter = StringListConverter.class)
+	private List<String> purpose;
+
+	@Column(nullable = false)
+	@Convert(converter = StringListConverter.class)
+	private List<String> interest;
+
 	@Builder
 	Profile(String memberId, String resident, String name, String imageUrl, boolean gender, LocalDate birth,
-		String nationality, int rperiod, String introduction) {
+		String nationality, int rperiod, String introduction, List<String> purpose, List<String> interest) {
 		Assert.notNull(memberId, "memberId must not be null");
 		Assert.notNull(resident, "resident must not be null");
 		Assert.notNull(name, "name must not be null");
@@ -71,6 +81,8 @@ public class Profile {
 		Assert.notNull(nationality, "nationality must not be null");
 		Assert.notNull(rperiod, "rperiod must not be null");
 		Assert.notNull(introduction, "introduction must not be null");
+		Assert.notNull(purpose, "purpose must not be null");
+		Assert.notNull(interest, "interest must not be null");
 
 		this.memberId = memberId;
 		this.resident = resident;
@@ -81,5 +93,7 @@ public class Profile {
 		this.nationality = nationality;
 		this.rperiod = rperiod;
 		this.introduction = introduction;
+		this.purpose = purpose;
+		this.interest = interest;
 	}
 }

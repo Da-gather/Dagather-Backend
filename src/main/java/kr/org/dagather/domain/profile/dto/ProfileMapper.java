@@ -7,17 +7,16 @@ import org.springframework.stereotype.Component;
 
 import kr.org.dagather.domain.friend.dto.FriendMapper;
 import kr.org.dagather.domain.friend.entity.Friend;
+import kr.org.dagather.domain.profile.entity.Location;
 import kr.org.dagather.domain.profile.entity.Profile;
-import kr.org.dagather.domain.profile.entity.ProfileInterest;
-import kr.org.dagather.domain.profile.entity.ProfilePurpose;
 import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
 public class ProfileMapper {
 
-	public ProfileResponseDto toResponseDto(Profile profile, List<ProfilePurpose> profilePurposes, List<ProfileInterest> profileInterests) {
-		if (profile == null || profilePurposes == null || profileInterests == null)
+	public ProfileResponseDto toResponseDto(Profile profile) {
+		if (profile == null)
 			throw new NullPointerException();
 
 		ProfileResponseDto.ProfileResponseDtoBuilder builder = ProfileResponseDto.builder();
@@ -31,14 +30,8 @@ public class ProfileMapper {
 		builder.nationality(profile.getNationality());
 		builder.rperiod(profile.getRperiod());
 		builder.introduction(profile.getIntroduction());
-
-		List<String> purposes = new ArrayList<>();
-		profilePurposes.forEach(p -> { purposes.add(p.getPurpose()); });
-		builder.purposes(purposes);
-
-		List<String> interests = new ArrayList<>();
-		profileInterests.forEach(i -> { interests.add(i.getInterest()); });
-		builder.interests(interests);
+		builder.purposes(profile.getPurpose());
+		builder.interests(profile.getInterest());
 
 		return builder.build();
 	}
@@ -80,6 +73,20 @@ public class ProfileMapper {
 		builder.introduction(profile.getIntroduction());
 		builder.purposes(profilePurposes);
 		builder.interests(profileInterests);
+
+		return builder.build();
+	}
+
+	public ProfileRecommendRequestItem toRequestItem(Profile profile, Location location) {
+
+		ProfileRecommendRequestItem.ProfileRecommendRequestItemBuilder builder = ProfileRecommendRequestItem.builder();
+
+		builder.id(profile.getId());
+		builder.purpose(profile.getPurpose());
+		builder.interest(profile.getInterest());
+		builder.rperiod(profile.getRperiod());
+		builder.latitude(location.getLatitude());
+		builder.longitude(location.getLongitude());
 
 		return builder.build();
 	}

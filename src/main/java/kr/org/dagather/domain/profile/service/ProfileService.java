@@ -4,8 +4,13 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import kr.org.dagather.common.exception.CustomException;
 import kr.org.dagather.common.response.ErrorCode;
@@ -20,15 +25,14 @@ import kr.org.dagather.domain.profile.dto.ProfileImagePostResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileInterestDto;
 import kr.org.dagather.domain.profile.dto.ProfileMapper;
 import kr.org.dagather.domain.profile.dto.ProfilePurposeDto;
+import kr.org.dagather.domain.profile.dto.ProfileRecommendRequestDto;
+import kr.org.dagather.domain.profile.dto.ProfileRecommendRequestItem;
+import kr.org.dagather.domain.profile.dto.ProfileRecommendResponseDto;
 import kr.org.dagather.domain.profile.dto.ProfileRequestDto;
 import kr.org.dagather.domain.profile.dto.ProfileResponseDto;
 import kr.org.dagather.domain.profile.entity.Location;
 import kr.org.dagather.domain.profile.entity.Profile;
-import kr.org.dagather.domain.profile.entity.ProfileInterest;
-import kr.org.dagather.domain.profile.entity.ProfilePurpose;
 import kr.org.dagather.domain.profile.repository.LocationRepository;
-import kr.org.dagather.domain.profile.repository.ProfileInterestRepository;
-import kr.org.dagather.domain.profile.repository.ProfilePurposeRepository;
 import kr.org.dagather.domain.profile.repository.ProfileRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -37,8 +41,6 @@ import lombok.RequiredArgsConstructor;
 public class ProfileService {
 
 	private final ProfileRepository profileRepository;
-	private final ProfilePurposeRepository profilePurposeRepository;
-	private final ProfileInterestRepository profileInterestRepository;
 	private final FriendRepository friendRepository;
 	private final LocationRepository locationRepository;
 	private final ProfileMapper profileMapper;
@@ -66,20 +68,9 @@ public class ProfileService {
 		profile.setRperiod(requestDto.getRperiod());
 		profile.setIntroduction(requestDto.getIntroduction());
 		profile.setImageUrl(requestDto.getImageUrl());
-
+		profile.setPurpose(requestDto.getPurposes());
+		profile.setInterest(requestDto.getInterests());
 		profileRepository.save(profile);
-
-		profilePurposeRepository.deleteAllByProfile(profile);
-		requestDto.getPurposes().forEach(p -> {
-			profilePurposeRepository.save(ProfilePurpose.builder().profile(profile).purpose(p).build());
-		});
-		List<ProfilePurpose> profilePurposes = profilePurposeRepository.findAllByProfile(profile);
-
-		profileInterestRepository.deleteAllByProfile(profile);
-		requestDto.getInterests().forEach(i -> {
-			profileInterestRepository.save(ProfileInterest.builder().profile(profile).interest(i).build());
-		});
-		List<ProfileInterest> profileInterests = profileInterestRepository.findAllByProfile(profile);
 
 		locationRepository.deleteAllByProfile(profile);
 		locationRepository.save(Location.builder()
@@ -88,7 +79,7 @@ public class ProfileService {
 			.latitude(requestDto.getLatitude())
 			.build());
 
-		return profileMapper.toResponseDto(profile, profilePurposes, profileInterests);
+		return profileMapper.toResponseDto(profile);
 	}
 
 	@Transactional
@@ -96,31 +87,21 @@ public class ProfileService {
 
 		// get current user info
 		String currentMemberId = AuthUtil.getLoggedInId();
-		System.out.println("profile service currentMemberId: " + currentMemberId);
 		if (currentMemberId == null || currentMemberId.isEmpty()) throw new CustomException(ErrorCode.NO_ID);
 
 		Profile myProfile = profileRepository.findProfileByMemberId(currentMemberId).orElse(null);
 		if (myProfile == null) throw new CustomException(ErrorCode.PROFILE_NOT_FOUND);
 
-		List<String> myPurposes = new ArrayList<>();
-		profilePurposeRepository.findAllByProfile(myProfile).forEach(p -> { myPurposes.add(p.getPurpose()); });
-
-		List<String> myInterests = new ArrayList<>();
-		profileInterestRepository.findAllByProfile(myProfile).forEach(i -> { myInterests.add(i.getInterest()); });
-
 		// get target user info
 		Profile profile = profileRepository.findProfileByMemberId(memberId).orElse(null);
 		if (profile == null) throw new CustomException(ErrorCode.PROFILE_NOT_FOUND);
 
-		List<ProfilePurpose> profilePurposes = profilePurposeRepository.findAllByProfile(profile);
-		List<ProfileInterest> profileInterests = profileInterestRepository.findAllByProfile(profile);
-
 		// compare purposes and interests
 		List<ProfilePurposeDto> purposes = new ArrayList<>();
-		profilePurposes.forEach(p -> { purposes.add(new ProfilePurposeDto(p.getPurpose(), myPurposes.contains(p.getPurpose()))); });
+		profile.getPurpose().forEach(p -> { purposes.add(new ProfilePurposeDto(p, myProfile.getPurpose().contains(p))); });
 
 		List<ProfileInterestDto> interests = new ArrayList<>();
-		profileInterests.forEach(i -> { interests.add(new ProfileInterestDto(i.getInterest(), myInterests.contains(i.getInterest()))); });
+		profile.getInterest().forEach(i -> { interests.add(new ProfileInterestDto(i, myProfile.getInterest().contains(i))); });
 
 		// add are we friend
 		Friend friend = friendRepository.findFriendByMembers(currentMemberId, memberId);
@@ -138,42 +119,69 @@ public class ProfileService {
 		Profile myProfile = profileRepository.findProfileByMemberId(currentMemberId).orElse(null);
 		if (myProfile == null) throw new CustomException(ErrorCode.PROFILE_NOT_FOUND);
 
-		List<String> myPurposes = new ArrayList<>();
-		profilePurposeRepository.findAllByProfile(myProfile).forEach(p -> { myPurposes.add(p.getPurpose()); });
+		// filtering
+		List<Profile> profileList;
+		if (filter != null && filter.equals("nation")) {
+			profileList = profileRepository.findAllByNationality(myProfile.getNationality());
+		} else {
+			profileList = profileRepository.findAll();
+		}
 
-		List<String> myInterests = new ArrayList<>();
-		profileInterestRepository.findAllByProfile(myProfile).forEach(i -> { myInterests.add(i.getInterest()); });
+		// remove friends from profile list
+		friendRepository.findFriendsByMemberId(currentMemberId).forEach(friend -> {
+			if (friend.getSender().equals(currentMemberId)) {
+				profileList.remove(profileRepository.findByMemberId(friend.getReceiver()));
+			} else {
+				profileList.remove(profileRepository.findByMemberId(friend.getSender()));
+			}
+		});
+
+		List<ProfileRecommendRequestItem> recommendRequestItems = new ArrayList<>();
+		profileList.forEach(profile -> {
+			recommendRequestItems.add(profileMapper.toRequestItem(profile, locationRepository.findByProfile(profile)));
+		});
+
+		// send request to flask
+		ProfileRecommendResponseDto responseDto = sendRequestToFlask(ProfileRecommendRequestDto.builder()
+			.id(myProfile.getId())
+			.profiles(recommendRequestItems)
+			.build());
 
 
-		// TODO: 추천시스템으로 요청 보내고 리스트 받기
-		List<Profile> profileList = profileRepository.findAll();
-		profileList.remove(myProfile);
-
+		// make response
 		List<ProfileGetListResponseDto> results = new ArrayList<>();
 
-		profileList.forEach(profile -> {
-			// get target user info
-			List<ProfilePurpose> profilePurposes = profilePurposeRepository.findAllByProfile(profile);
-			List<ProfileInterest> profileInterests = profileInterestRepository.findAllByProfile(profile);
+		responseDto.getData().getSortedIdList().forEach(id -> {
+			Profile profile = profileRepository.findProfileById(id);
 
 			// compare purposes and interests
 			List<ProfilePurposeDto> purposes = new ArrayList<>();
-			profilePurposes.forEach(p -> { purposes.add(new ProfilePurposeDto(p.getPurpose(), myPurposes.contains(p.getPurpose()))); });
+			profile.getPurpose().forEach(p -> { purposes.add(new ProfilePurposeDto(p, myProfile.getPurpose().contains(p))); });
 
 			List<ProfileInterestDto> interests = new ArrayList<>();
-			profileInterests.forEach(i -> { interests.add(new ProfileInterestDto(i.getInterest(), myInterests.contains(i.getInterest()))); });
+			profile.getInterest().forEach(i -> { interests.add(new ProfileInterestDto(i, myProfile.getInterest().contains(i))); });
 
 			results.add(profileMapper.toGetResponseDto(profile, purposes, interests));
 		});
 
-		//TODO: filtering
-		if (filter != null && filter.equals("nation")) {
-
-		} else if (filter != null && filter.equals("nearby")) {
-
-		}
-
 		return results;
 	}
 
+	private ProfileRecommendResponseDto sendRequestToFlask(ProfileRecommendRequestDto requestDto) {
+		try {
+			HttpHeaders headers = new HttpHeaders();
+			headers.add("Content-type", "application/json; charset=UTF-8");
+
+			RestTemplate restTemplate = new RestTemplate();
+			ResponseEntity<ProfileRecommendResponseDto> responseEntity = restTemplate.postForEntity(
+				"http://localhost:8000/api/v1/profile/recommend",
+				new HttpEntity<>(requestDto, headers),
+				ProfileRecommendResponseDto.class
+			);
+
+			return responseEntity.getBody();
+		} catch (HttpClientErrorException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

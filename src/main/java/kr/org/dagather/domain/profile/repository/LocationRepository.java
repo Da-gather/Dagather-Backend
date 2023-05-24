@@ -8,4 +8,5 @@ import kr.org.dagather.domain.profile.entity.Profile;
 public interface LocationRepository extends JpaRepository<Location, Long> {
 
 	void deleteAllByProfile(Profile profile);
+	Location findByProfile(Profile profile);
 }
