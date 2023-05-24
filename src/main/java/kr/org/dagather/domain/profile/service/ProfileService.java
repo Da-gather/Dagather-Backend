@@ -164,6 +164,7 @@ public class ProfileService {
 			results.add(profileMapper.toGetResponseDto(profile, purposes, interests));
 		});
 
+		results.remove(0);
 		return results;
 	}
 
