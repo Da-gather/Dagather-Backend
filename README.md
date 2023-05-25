@@ -2,6 +2,7 @@
 ### [다문화 가정을 위한 친구 사귀기 플랫폼]
 다게더는 다문화 가정의 정보 취약, 외로움, 한국 생활 적응의 어려움 등의 문제점에서 출발하여, <br>
 다문화 가정 간의 커뮤니티 활성화를 위한 친구 사귀기 플랫폼을 제공합니다.
+<img width="631" alt="Screenshot 2023-05-25 at 6 37 20 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/fb6c1db1-2154-4dc3-b070-945ce59415e4">
 <br><br>
 
 
