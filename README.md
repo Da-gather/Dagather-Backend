@@ -25,10 +25,10 @@
 
   가입 목적, 관심사, 거리, 한국거주기간 등을 기반으로 홈 화면에서 친구를 추천순으로 제공합니다.
   
-  <img width="449" alt="Screenshot 2024-02-11 at 7 34 41 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/3fdd8f42-62ef-481b-b036-2614fda4418d">
-  <img width="450" alt="Screenshot 2024-02-11 at 7 34 50 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/374bd4a4-f99a-4e39-8102-a25999c3c4d7">
-  <img width="450" alt="Screenshot 2024-02-11 at 7 35 12 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/c56d34cb-adee-4ba5-891e-877f19febf41">
-  <img width="449" alt="Screenshot 2024-02-11 at 7 35 01 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/c975e556-3361-44c4-8d06-93727f2cdc14">
+  <img width="40%" alt="Screenshot 2024-02-11 at 7 34 41 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/3fdd8f42-62ef-481b-b036-2614fda4418d">
+  <img width="40%" alt="Screenshot 2024-02-11 at 7 34 50 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/374bd4a4-f99a-4e39-8102-a25999c3c4d7">
+  <img width="40%" alt="Screenshot 2024-02-11 at 7 35 12 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/c56d34cb-adee-4ba5-891e-877f19febf41">
+  <img width="40%" alt="Screenshot 2024-02-11 at 7 35 01 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/c975e556-3361-44c4-8d06-93727f2cdc14">
   
 
 - **맞춤법 검사와 번역**
@@ -36,9 +36,9 @@
   친구와 채팅을 하며 한국어 맞춤법 검사 기능을 통해 한국어 공부를 할 수 있습니다. <br>
   다른 국적의 친구와 원활한 소통을 위해 번역 기능을 제공합니다.
 
-  <img width="449" alt="Screenshot 2024-02-11 at 7 35 25 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/a725c077-493c-4e6e-a4bc-98126acd7065">
-  <img width="449" alt="Screenshot 2024-02-11 at 7 35 36 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/4ef8bc46-0e72-47dc-bd69-59726483386c">
-  <img width="449" alt="Screenshot 2024-02-11 at 7 35 36 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/1d5c58a4-ee18-4d09-be87-52b1fb330ce7">
+  <img width="30%" alt="Screenshot 2024-02-11 at 7 35 25 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/a725c077-493c-4e6e-a4bc-98126acd7065">
+  <img width="30%" alt="Screenshot 2024-02-11 at 7 35 36 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/4ef8bc46-0e72-47dc-bd69-59726483386c">
+  <img width="30%" alt="Screenshot 2024-02-11 at 7 35 36 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/1d5c58a4-ee18-4d09-be87-52b1fb330ce7">
   
 
  
@@ -47,17 +47,18 @@
   친구와 더 친해지고, 한국과도 더 친해질 수 있도록 다양한 미션을 제공합니다. <br>
   친구와 함께 미션을 수행할 수 있고, 마이페이지에서 완료한 미션을 한눈에 확인할 수 있습니다.
 
-  <img width="450" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/d8bf1689-43aa-4256-b39b-3c4cb85a5f67">
-  <img width="449" alt="Screenshot 2024-02-11 at 7 36 18 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/35088c23-a8ac-4852-80dc-523722dd97e7">
+  <img width="40%" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/d8bf1689-43aa-4256-b39b-3c4cb85a5f67">
+  <img width="40%" alt="Screenshot 2024-02-11 at 7 36 18 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/35088c23-a8ac-4852-80dc-523722dd97e7">
   
 <br><br>
 
 ## 아키텍쳐
-![image](https://github.com/Da-gather/Dagather-Backend/assets/79203421/ee0eff4e-9662-450c-83fe-30d363a34ef4)
+<img width="80%" alt="Screenshot 2024-02-11 at 6 46 37 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/ee0eff4e-9662-450c-83fe-30d363a34ef4">
+
 <br><br>
 
 ## ERD
-<img width="999" alt="Screenshot 2024-02-11 at 6 46 37 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/ba875055-e518-45c3-8202-0ae3dd011ebb">
+<img width="80%" alt="Screenshot 2024-02-11 at 6 46 37 PM" src="https://github.com/Da-gather/Dagather-Backend/assets/79203421/ba875055-e518-45c3-8202-0ae3dd011ebb">
 <br><br>
 
 ## API 명세
