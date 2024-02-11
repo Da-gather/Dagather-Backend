@@ -211,6 +211,8 @@ private List<String> interest;
 ### 결과
 프로필 리스트 조회 API의 응답 속도는 약 3초로, 기존 대비 60% 가량 향상되었습니다. 
 
+<br><br>
+
 ## 폴더 구조
 ```bash
 ├── DagatherApplication.java
