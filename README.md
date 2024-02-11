@@ -292,18 +292,14 @@ private List<String> interest;
         │   ├── ProfileInterestDto.java
         │   ├── ProfileMapper.java
         │   ├── ProfilePurposeDto.java
-        │   ├── ProfileRecommendRequestDto 2.java
         │   ├── ProfileRecommendRequestDto.java
-        │   ├── ProfileRecommendRequestItem 2.java
         │   ├── ProfileRecommendRequestItem.java
-        │   ├── ProfileRecommendResponseDto 2.java
         │   ├── ProfileRecommendResponseDto.java
         │   ├── ProfileRequestDto.java
         │   └── ProfileResponseDto.java
         ├── entity
         │   ├── Location.java
         │   ├── Profile.java
-        │   ├── StringListConverter 2.java
         │   └── StringListConverter.java
         ├── repository
         │   ├── LocationRepository.java
